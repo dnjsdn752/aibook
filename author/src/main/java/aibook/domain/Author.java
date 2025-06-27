@@ -64,6 +64,7 @@ public class Author {
     //<<< Clean Arch / Port Method
     public void approveAuthor(ApproveAuthorCommand approveAuthorCommand) {
         //implement business logic here:
+        this.setIsApprove(true);
 
         AuthorApproved authorApproved = new AuthorApproved(this);
         authorApproved.publishAfterCommit();
@@ -75,6 +76,8 @@ public class Author {
         DisapproveAuthorCommand disapproveAuthorCommand
     ) {
         //implement business logic here:
+        this.setIsApprove(false);
+        
         AuthorDisApproved authorDisApproved = new AuthorDisApproved(this);
         authorDisApproved.publishAfterCommit();
     }
