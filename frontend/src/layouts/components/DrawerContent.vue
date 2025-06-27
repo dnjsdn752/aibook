@@ -1,0 +1,78 @@
+<script setup>
+import {
+  VerticalNavLink,
+  VerticalNavSectionTitle,
+} from '@layouts'
+</script>
+
+<template>
+    <ul>
+        <VerticalNavSectionTitle :item="{ heading: '작가관리' }" />
+        <VerticalNavLink
+            :item="{
+                title: '작가',
+                to: '/authors',
+            }"
+        />
+        <VerticalNavSectionTitle :item="{ heading: '구독자관리' }" />
+        <VerticalNavLink
+            :item="{
+                title: '구독자',
+                to: '/users',
+            }"
+        />
+        <VerticalNavLink
+            :item="{
+                title: '대여',
+                to: '/readings',
+            }"
+        />
+        <VerticalNavSectionTitle :item="{ heading: '집필관리' }" />
+        <VerticalNavLink
+            :item="{
+                title: '원고',
+                to: '/manuscripts',
+            }"
+        />
+        <VerticalNavSectionTitle :item="{ heading: '포인트관리' }" />
+        <VerticalNavLink
+            :item="{
+                title: '포인트',
+                to: '/points',
+            }"
+        />
+        <VerticalNavSectionTitle :item="{ heading: '도서관리' }" />
+        <VerticalNavLink
+            :item="{
+                title: '도서',
+                to: '/books',
+            }"
+        />
+        <VerticalNavSectionTitle :item="{ heading: 'AI ' }" />
+        <VerticalNavLink
+            :item="{
+                title: 'AI',
+                to: '/ais',
+            }"
+        />
+        <VerticalNavSectionTitle :item="{ heading: 'monitoring' }" />
+        <VerticalNavLink
+            :item="{
+                title: '도서 조회',
+                to: '/bookpages',
+            }"
+        />
+        <VerticalNavLink
+            :item="{
+                title: '대여 열람',
+                to: '/readingPages',
+            }"
+        />
+        <VerticalNavLink
+            :item="{
+                title: '포인트조회',
+                to: '/getPoints',
+            }"
+        />
+    </ul>
+</template>
