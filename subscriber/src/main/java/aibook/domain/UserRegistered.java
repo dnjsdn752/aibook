@@ -18,10 +18,6 @@ public class UserRegistered extends AbstractEvent {
 
     public UserRegistered(User aggregate) {
         super(aggregate);
-        this.id = aggregate.getId();
-        this.email = aggregate.getEmail();
-        this.userName = aggregate.getUserName();
-        this.password = aggregate.getPassword();
     }
 
     public UserRegistered() {
