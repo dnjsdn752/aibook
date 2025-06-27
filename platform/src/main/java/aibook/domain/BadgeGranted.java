@@ -14,10 +14,10 @@ public class BadgeGranted extends AbstractEvent {
     private Long id;
     private String category;
     private Long authorId;
-    private String isBestSeller;
+    private Boolean isBestSeller;
     private String authorName;
     private Integer view;
-    private String bookName;
+    private String title;
 
     public BadgeGranted(Book aggregate) {
         super(aggregate);
@@ -27,4 +27,6 @@ public class BadgeGranted extends AbstractEvent {
         super();
     }
 }
+
+
 //>>> DDD / Domain Event

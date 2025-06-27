@@ -10,8 +10,8 @@ import lombok.*;
 public class ReadingCanceled extends AbstractEvent {
 
     private Long id;
-    private Object userId;
-    private Object bookId;
+    private Long userId;
+    private Long bookId;
     private Boolean isReading;
     private Date startReading;
     private String webUrl;

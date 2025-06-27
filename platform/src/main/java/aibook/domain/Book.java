@@ -24,11 +24,11 @@ public class Book {
 
     private Long authorId;
 
-    private String bookName;
+    private String title;
 
     private String category;
 
-    private String isBestSeller;
+    private Boolean isBestSeller;
 
     private String authorName;
 
@@ -36,7 +36,7 @@ public class Book {
 
     private String aiSummary;
 
-    private String bookContent;
+    private String content;
 
     private Integer view;
 
@@ -49,102 +49,48 @@ public class Book {
         return bookRepository;
     }
 
-    //<<< Clean Arch / Port Method
-    public static void registerBook(PublishingRequested publishingRequested) {
-        //implement business logic here:
-
-        /** Example 1:  new item 
+    //도서 등록
+    public static void registerBook(PublishingRequested event) {
         Book book = new Book();
+        book.setAuthorId(event.getAuthorId());
+        book.setTitle(event.getTitle());
+        book.setContent(event.getContent());
+        book.setAuthorName(event.getAuthorName());
+        book.setDate(new Date());
+        book.setAiImage(event.getAiImage());
+        book.setAiSummary(event.getAiSummary());
+        book.setCategory(event.getCategory());
+        book.setView(0);
+        book.setIsBestSeller(false);
         repository().save(book);
 
         BookRegistered bookRegistered = new BookRegistered(book);
         bookRegistered.publishAfterCommit();
-        */
-
-        /** Example 2:  finding and process
-        
-
-        repository().findById(publishingRequested.get???()).ifPresent(book->{
-            
-            book // do something
-            repository().save(book);
-
-            BookRegistered bookRegistered = new BookRegistered(book);
-            bookRegistered.publishAfterCommit();
-
-         });
-        */
-
     }
 
-    //>>> Clean Arch / Port Method
-    //<<< Clean Arch / Port Method
-    public static void viewCount(ReadingCanceled readingCanceled) {
-        //implement business logic here:
+    
+    public static void viewCount(ReadingCanceled readingCanceled,Boolean isIncrease) {
+        Book book = repository().findById(readingCanceled.getBookId()).orElseThrow(
+            () -> new EntityNotFoundException("해당 ID의 Book이 존재하지 않습니다: "));
+        int view = book.getView();
 
-        /** Example 1:  new item 
-        Book book = new Book();
-        repository().save(book);
+        if(isIncrease){
+            book.setView(view + 1);
+        }else{
+            if(view > 0)
+                book.setView(view-1);
+            else
+                book.setView(0);
+        }
+        if(book.getView() >= 5)
+            book.setIsBestSeller(true);
+        else
+            book.setIsBestSeller(false);
 
         BadgeGranted badgeGranted = new BadgeGranted(book);
         badgeGranted.publishAfterCommit();
-        */
-
-        /** Example 2:  finding and process
-        
-        // if readingCanceled.userIdbookId exists, use it
-        
-        // ObjectMapper mapper = new ObjectMapper();
-        // Map<Long, Object> readingMap = mapper.convertValue(readingCanceled.getUserId(), Map.class);
-        // Map<Long, Object> readingMap = mapper.convertValue(readingCanceled.getBookId(), Map.class);
-
-        repository().findById(readingCanceled.get???()).ifPresent(book->{
-            
-            book // do something
-            repository().save(book);
-
-            BadgeGranted badgeGranted = new BadgeGranted(book);
-            badgeGranted.publishAfterCommit();
-
-         });
-        */
-
     }
 
-    //>>> Clean Arch / Port Method
-    //<<< Clean Arch / Port Method
-    public static void viewCount(PointDecreased pointDecreased) {
-        //implement business logic here:
-
-        /** Example 1:  new item 
-        Book book = new Book();
-        repository().save(book);
-
-        BadgeGranted badgeGranted = new BadgeGranted(book);
-        badgeGranted.publishAfterCommit();
-        */
-
-        /** Example 2:  finding and process
-        
-        // if pointDecreased.readingIduserId exists, use it
-        
-        // ObjectMapper mapper = new ObjectMapper();
-        // Map<Long, Object> pointMap = mapper.convertValue(pointDecreased.getReadingId(), Map.class);
-        // Map<Long, Object> pointMap = mapper.convertValue(pointDecreased.getUserId(), Map.class);
-
-        repository().findById(pointDecreased.get???()).ifPresent(book->{
-            
-            book // do something
-            repository().save(book);
-
-            BadgeGranted badgeGranted = new BadgeGranted(book);
-            badgeGranted.publishAfterCommit();
-
-         });
-        */
-
-    }
-    //>>> Clean Arch / Port Method
+    
 
 }
-//>>> DDD / Aggregate Root
