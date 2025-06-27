@@ -15,6 +15,7 @@ public class PublishingRequested extends AbstractEvent {
     private String content;
     private Object status;
     private String authorName;
+    private String category;
     private Date date;
     private String aiImage;
     private String aiSummary;
