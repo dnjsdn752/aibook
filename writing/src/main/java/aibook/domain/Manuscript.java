@@ -28,7 +28,7 @@ public class Manuscript {
 
     private String content;
 
-    private Status status;
+    private Boolean status;
 
     private String authorName;
 
@@ -40,12 +40,18 @@ public class Manuscript {
 
     @PostPersist
     public void onPostPersist() {
+        // 원고 등록 이벤트 발행
+        ManuscriptRegistered manuscriptRegistered = new ManuscriptRegistered(this);
+        manuscriptRegistered.publishAfterCommit();
         AiRequest aiRequest = new AiRequest(this);
         aiRequest.publishAfterCommit();
     }
 
     @PostUpdate
     public void onPostUpdate() {
+        // 원고 수정 이벤트 발행
+        ManuscriptEdited manuscriptEdited = new ManuscriptEdited(this);
+        manuscriptEdited.publishAfterCommit();
         PublishingRequested publishingRequested = new PublishingRequested(this);
         publishingRequested.publishAfterCommit();
     }
@@ -59,29 +65,51 @@ public class Manuscript {
 
     //<<< Clean Arch / Port Method
     public void registerManuscript(
-        RegisterManuscriptCommand registerManuscriptCommand
+        RegisterManuscriptCommand command
     ) {
-        //implement business logic here:
+        // 비즈니스 로직 예시
+        this.title = command.getTitle();
+        this.content = command.getContent();
+        this.status = false;
+        this.authorName = command.getAuthorName();
+        this.date = new Date();
 
-        ManuscriptRegistered manuscriptRegistered = new ManuscriptRegistered(
-            this
-        );
+        ManuscriptRegistered manuscriptRegistered = new ManuscriptRegistered(this);
         manuscriptRegistered.publishAfterCommit();
     }
 
     //>>> Clean Arch / Port Method
     //<<< Clean Arch / Port Method
-    public void editManuscript(EditManuscriptCommand editManuscriptCommand) {
-        //implement business logic here:
+    public void editManuscript(EditManuscriptCommand command) {
+        this.title = command.getTitle();
+        this.content = command.getContent();
 
         ManuscriptEdited manuscriptEdited = new ManuscriptEdited(this);
         manuscriptEdited.publishAfterCommit();
     }
 
     //>>> Clean Arch / Port Method
+    public void requestPublishing() {
+        this.status = true;
 
+        PublishingRequested publishingRequested = new PublishingRequested(this);
+        publishingRequested.publishAfterCommit();
+    }
+
+     //<<< Clean Arch / Port Method
+    public void requestAi() {
+        AiRequested aiRequested = new AiRequested(this);
+        aiRequested.publishAfterCommit();
+    }
     //<<< Clean Arch / Port Method
     public static void aiImage(AiGenerated aiGenerated) {
+        repository().findById(aiGenerated.getManuscriptId()).ifPresent(manuscript -> {
+            manuscript.setAiImage(aiGenerated.getAiImage());
+            manuscript.setAiSummary(aiGenerated.getAiSummary());
+            repository().save(manuscript);
+        });
+    }
+    
         //implement business logic here:
 
         /** Example 1:  new item 
@@ -106,7 +134,7 @@ public class Manuscript {
          });
         */
 
-    }
+    
     //>>> Clean Arch / Port Method
 
 }
