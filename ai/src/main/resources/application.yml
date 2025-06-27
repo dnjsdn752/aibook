@@ -1,6 +1,10 @@
 server:
   port: 8080
 
+llm:
+  api:
+    url: http://api.openai.com/v1/chat/completions
+    key: # api키 연결하는 부분
 spring:
   application:
     name: ai

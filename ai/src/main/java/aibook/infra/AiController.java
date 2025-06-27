@@ -19,5 +19,24 @@ public class AiController {
 
     @Autowired
     AiRepository aiRepository;
+
+    @Autowired
+    LlmService llmService;
+
+    @PostMapping("/ais/{id}/generated")
+    public ResponseEntity<?> generateAi(@PathVariable Long id) {
+        Ai ai = aiRepository.findById(id).orElseThrow();
+
+        AiRequest request = new AiRequest();
+        request.setId(ai.getManuscriptId());
+        request.setTitle(ai.getTitle());
+        request.setContent(ai.getContent());
+        request.setAuthorId(ai.getAuthorId());
+        request.setAuthorName("작성자");
+
+        llmService.callLlmAndSave(request);
+
+        return ResponseEntity.ok("LLM 요청 완료");
+    }
 }
 //>>> Clean Arch / Inbound Adaptor

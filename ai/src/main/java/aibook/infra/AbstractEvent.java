@@ -13,6 +13,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 import org.springframework.util.MimeTypeUtils;
 
 //<<< Clean Arch / Outbound Adaptor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class AbstractEvent {
 
     String eventType;
