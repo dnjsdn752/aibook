@@ -10,9 +10,19 @@ import lombok.*;
 public class ReadingApplied extends AbstractEvent {
 
     private Long id;
-    private Object userId;
-    private Object bookId;
+    private Long userId;
+    private Long bookId;
     private Boolean isReading;
     private Date startReading;
     private String webUrl;
+    private int usedPoint;
+
+    public Long getReadingId() {
+        return id;
+    }
+
+    public int getUsedPoint() {
+        return usedPoint;
+    }
+    
 }

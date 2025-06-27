@@ -19,5 +19,20 @@ public class PointController {
 
     @Autowired
     PointRepository pointRepository;
+
+    @PostMapping("/users/registered")
+    public void userRegistered(@RequestBody UserRegistered event) {
+        Point.gainRegisterPoint(event);
+    }
+
+    @PostMapping("/readings/applied")
+    public void readingApplied(@RequestBody ReadingApplied event) {
+        Point.decreasePoint(event);
+    }
+
+    @PostMapping("/readings/canceled")
+    public void readingCanceled(@RequestBody ReadingCanceled event) {
+        Point.increasePoint(event);
+    }
 }
 //>>> Clean Arch / Inbound Adaptor

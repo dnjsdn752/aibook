@@ -13,7 +13,7 @@ public class OutOfPoint extends AbstractEvent {
 
     private Long id;
     private Integer point;
-    private UserId userId;
+    private Long userId;
 
     public OutOfPoint(Point aggregate) {
         super(aggregate);

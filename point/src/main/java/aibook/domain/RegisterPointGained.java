@@ -14,8 +14,8 @@ public class RegisterPointGained extends AbstractEvent {
     private Long id;
     private Integer point;
     private Boolean isSubscribe;
-    private ReadingId readingId;
-    private UserId userId;
+    private Long readingId;
+    private Long userId;
 
     public RegisterPointGained(Point aggregate) {
         super(aggregate);
