@@ -29,9 +29,15 @@ public class User {
 
     private Boolean isSubscription;
 
+    private Boolean recommendedSubscription = false;
+
     @PostPersist
     public void onPostPersist() {
         UserRegistered userRegistered = new UserRegistered(this);
+        userRegistered.setId(this.getId());
+        userRegistered.setEmail(this.getEmail());
+        userRegistered.setUserName(this.getUserName());
+        userRegistered.setPassword(this.getPassword());
         userRegistered.publishAfterCommit();
     }
 
@@ -43,8 +49,10 @@ public class User {
     }
 
     //<<< Clean Arch / Port Method
-    public void buySubscription(BuySubscriptionCommand buySubscriptionCommand) {
+    public void buySubscription(BuySubscriptionCommand command) {
         //implement business logic here:
+        // 예: 실제 구독 상태 변경 로직 추가
+        this.isSubscription = command.getIsSubscription();
 
         SubscriptionBought subscriptionBought = new SubscriptionBought(this);
         subscriptionBought.publishAfterCommit();
@@ -58,28 +66,21 @@ public class User {
     ) {
         //implement business logic here:
 
-        /** Example 1:  new item 
-        User user = new User();
-        repository().save(user);
+        Long userId = readingFailed.getId();
 
-        */
+        repository().findById(userId).ifPresent(user -> {
+            if (Boolean.TRUE.equals(user.getIsSubscription())) {
+                return; // 이미 구독 중이면 무시
+            }
 
-        /** Example 2:  finding and process
-        
-        // if readingFailed.userIdbookId exists, use it
-        
-        // ObjectMapper mapper = new ObjectMapper();
-        // Map<Long, Object> readingMap = mapper.convertValue(readingFailed.getUserId(), Map.class);
-        // Map<Long, Object> readingMap = mapper.convertValue(readingFailed.getBookId(), Map.class);
+            user.setRecommendedSubscription(true); // 구독 유도 표시
 
-        repository().findById(readingFailed.get???()).ifPresent(user->{
-            
-            user // do something
+            // // (선택) 이벤트 발행
+            // SubscriptionRecommended event = new SubscriptionRecommended(user);
+            // event.publishAfterCommit();
+
             repository().save(user);
-
-
-         });
-        */
+        });
 
     }
     //>>> Clean Arch / Port Method
