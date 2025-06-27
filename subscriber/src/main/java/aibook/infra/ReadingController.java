@@ -19,5 +19,24 @@ public class ReadingController {
 
     @Autowired
     ReadingRepository readingRepository;
+
+    @RequestMapping(
+        value = "/reading/apply",
+        method = RequestMethod.POST,
+        produces = "application/json;charset=UTF-8"
+    )
+    public Reading readingApply(
+        HttpServletRequest request,
+        HttpServletResponse response,
+        @RequestBody ReadingAppliedCommand readingAppliedCommand
+    ) throws Exception {
+        System.out.println(
+            "##### /manuscript/registerManuscript  called #####"
+        );
+        Reading reading = new Reading();
+        reading.readingApplied(readingAppliedCommand);
+        return readingRepository.save(reading);
+    }
 }
-//>>> Clean Arch / Inbound Adaptor
+
+    

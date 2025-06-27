@@ -29,11 +29,9 @@ public class Reading {
 
     private String webUrl;
 
-    @Embedded
-    private UserId userId;
+    private Long userId;
 
-    @Embedded
-    private BookId bookId;
+    private Long bookId;
 
     @PostPersist
     public void onPostPersist() {
@@ -56,8 +54,19 @@ public class Reading {
         );
         return readingRepository;
     }
+    public void readingApplied(ReadingAppliedCommand command){
+        this.isReading = false;
+        this.startReading = new Date();
+        this.webUrl = null;
+        this.userId = command.getUserId();
+        this.bookId = command.getBookId();
 
-    //<<< Clean Arch / Port Method
+
+        ReadingApplied readingApplied = new ReadingApplied(this);
+        readingApplied.publishAfterCommit();
+
+    }
+    
     public static void failSubscription(OutOfPoint outOfPoint) {
         //implement business logic here:
 
