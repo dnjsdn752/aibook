@@ -1,14 +1,8 @@
 package aibook.domain;
 
 import aibook.WritingApplication;
-import aibook.domain.AiRequest;
-import aibook.domain.PublishingRequested;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.LocalDate;
-import java.util.Collections;
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
 import javax.persistence.*;
 import lombok.Data;
 
@@ -43,8 +37,6 @@ public class Manuscript {
         // 원고 등록 이벤트 발행
         ManuscriptRegistered manuscriptRegistered = new ManuscriptRegistered(this);
         manuscriptRegistered.publishAfterCommit();
-        AiRequest aiRequest = new AiRequest(this);
-        aiRequest.publishAfterCommit();
     }
 
     @PostUpdate
@@ -52,8 +44,6 @@ public class Manuscript {
         // 원고 수정 이벤트 발행
         ManuscriptEdited manuscriptEdited = new ManuscriptEdited(this);
         manuscriptEdited.publishAfterCommit();
-        PublishingRequested publishingRequested = new PublishingRequested(this);
-        publishingRequested.publishAfterCommit();
     }
 
     public static ManuscriptRepository repository() {
@@ -64,10 +54,7 @@ public class Manuscript {
     }
 
     //<<< Clean Arch / Port Method
-    public void registerManuscript(
-        RegisterManuscriptCommand command
-    ) {
-        // 비즈니스 로직 예시
+    public void registerManuscript(RegisterManuscriptCommand command) {
         this.title = command.getTitle();
         this.content = command.getContent();
         this.status = false;
@@ -77,8 +64,8 @@ public class Manuscript {
         ManuscriptRegistered manuscriptRegistered = new ManuscriptRegistered(this);
         manuscriptRegistered.publishAfterCommit();
     }
-
     //>>> Clean Arch / Port Method
+
     //<<< Clean Arch / Port Method
     public void editManuscript(EditManuscriptCommand command) {
         this.title = command.getTitle();
@@ -87,20 +74,24 @@ public class Manuscript {
         ManuscriptEdited manuscriptEdited = new ManuscriptEdited(this);
         manuscriptEdited.publishAfterCommit();
     }
-
     //>>> Clean Arch / Port Method
+
+    //<<< Clean Arch / Port Method
     public void requestPublishing() {
         this.status = true;
 
         PublishingRequested publishingRequested = new PublishingRequested(this);
         publishingRequested.publishAfterCommit();
     }
+    //>>> Clean Arch / Port Method
 
-     //<<< Clean Arch / Port Method
+    //<<< Clean Arch / Port Method
     public void requestAi() {
         AiRequested aiRequested = new AiRequested(this);
         aiRequested.publishAfterCommit();
     }
+    //>>> Clean Arch / Port Method
+
     //<<< Clean Arch / Port Method
     public static void aiImage(AiGenerated aiGenerated) {
         repository().findById(aiGenerated.getManuscriptId()).ifPresent(manuscript -> {
@@ -109,32 +100,6 @@ public class Manuscript {
             repository().save(manuscript);
         });
     }
-    
-        //implement business logic here:
-
-        /** Example 1:  new item 
-        Manuscript manuscript = new Manuscript();
-        repository().save(manuscript);
-
-        */
-
-        /** Example 2:  finding and process
-        
-        // if aiGenerated.llmId exists, use it
-        
-        // ObjectMapper mapper = new ObjectMapper();
-        // Map<, Object> aiMap = mapper.convertValue(aiGenerated.getLlmId(), Map.class);
-
-        repository().findById(aiGenerated.get???()).ifPresent(manuscript->{
-            
-            manuscript // do something
-            repository().save(manuscript);
-
-
-         });
-        */
-
-    
     //>>> Clean Arch / Port Method
 
 }

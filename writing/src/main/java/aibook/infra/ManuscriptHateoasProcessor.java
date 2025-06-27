@@ -12,18 +12,16 @@ public class ManuscriptHateoasProcessor
 
     @Override
     public EntityModel<Manuscript> process(EntityModel<Manuscript> model) {
+        String baseUri = model.getRequiredLink("self").getHref();
+
         model.add(
-            Link
-                .of(
-                    model.getRequiredLink("self").getHref() +
-                    "/registermanuscript"
-                )
-                .withRel("registermanuscript")
+            Link.of(baseUri + "/editmanuscript").withRel("editmanuscript")
         );
         model.add(
-            Link
-                .of(model.getRequiredLink("self").getHref() + "/editmanuscript")
-                .withRel("editmanuscript")
+            Link.of(baseUri + "/requestpublishing").withRel("requestpublishing")
+        );
+        model.add(
+            Link.of(baseUri + "/requestai").withRel("requestai")
         );
 
         return model;
