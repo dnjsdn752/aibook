@@ -7,8 +7,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 //<<< Clean Arch / Inbound Adaptor
 
@@ -58,6 +56,42 @@ public class ManuscriptController {
         optionalManuscript.orElseThrow(() -> new Exception("No Entity Found"));
         Manuscript manuscript = optionalManuscript.get();
         manuscript.editManuscript(editManuscriptCommand);
+
+        manuscriptRepository.save(manuscript);
+        return manuscript;
+    }
+
+    @RequestMapping(
+        value = "/manuscripts/{id}/requestai",
+        method = RequestMethod.PUT,
+        produces = "application/json;charset=UTF-8"
+    )
+    public Manuscript requestAi(
+        @PathVariable(value = "id") Long id
+    ) throws Exception {
+        Optional<Manuscript> optionalManuscript = manuscriptRepository.findById(id);
+        optionalManuscript.orElseThrow(() -> new Exception("No Entity Found"));
+
+        Manuscript manuscript = optionalManuscript.get();
+        manuscript.requestAi();
+
+        manuscriptRepository.save(manuscript);
+        return manuscript;
+    }
+
+    @RequestMapping(
+        value = "/manuscripts/{id}/requestpublishing",
+        method = RequestMethod.PUT,
+        produces = "application/json;charset=UTF-8"
+    )
+    public Manuscript requestPublishing(
+        @PathVariable(value = "id") Long id
+    ) throws Exception {
+        Optional<Manuscript> optionalManuscript = manuscriptRepository.findById(id);
+        optionalManuscript.orElseThrow(() -> new Exception("No Entity Found"));
+
+        Manuscript manuscript = optionalManuscript.get();
+        manuscript.requestPublishing();
 
         manuscriptRepository.save(manuscript);
         return manuscript;
