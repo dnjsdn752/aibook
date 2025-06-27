@@ -16,5 +16,7 @@ public class AiRequest extends AbstractEvent {
     private String authorName;
 
     private String aiImage;
-    private Stirng aiSummary;
+    private String aiSummary;
+    private Long manuscriptId;
+
 }
