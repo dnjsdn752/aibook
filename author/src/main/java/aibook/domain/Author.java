@@ -44,9 +44,27 @@ public class Author {
         return authorRepository;
     }
 
+    public static Author requestAuthor(RequestAuthorCommand command) {
+        Author author = new Author();
+        author.setEmail(command.getEmail());
+        author.setAuthorName(command.getAuthorName());
+        author.setIntroduction(command.getIntroduction());
+        author.setFeaturedWorks(command.getFeaturedWorks());
+        author.setIsApprove(false); // 등록 요청은 승인 전 상태
+
+        repository().save(author);
+
+        AuthorRequested event = new AuthorRequested(author);
+        event.publishAfterCommit();
+
+        return author;
+    }
+
+
     //<<< Clean Arch / Port Method
     public void approveAuthor(ApproveAuthorCommand approveAuthorCommand) {
         //implement business logic here:
+        this.setIsApprove(true);
 
         AuthorApproved authorApproved = new AuthorApproved(this);
         authorApproved.publishAfterCommit();
@@ -58,7 +76,8 @@ public class Author {
         DisapproveAuthorCommand disapproveAuthorCommand
     ) {
         //implement business logic here:
-
+        this.setIsApprove(false);
+        
         AuthorDisApproved authorDisApproved = new AuthorDisApproved(this);
         authorDisApproved.publishAfterCommit();
     }

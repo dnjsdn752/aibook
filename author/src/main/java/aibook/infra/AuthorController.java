@@ -7,8 +7,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 //<<< Clean Arch / Inbound Adaptor
 
@@ -19,6 +17,11 @@ public class AuthorController {
 
     @Autowired
     AuthorRepository authorRepository;
+
+    @PostMapping("/authors/request")
+    public Author requestAuthor(@RequestBody RequestAuthorCommand command) {
+        return Author.requestAuthor(command);
+    }
 
     @RequestMapping(
         value = "/authors/{id}/approveauthor",
