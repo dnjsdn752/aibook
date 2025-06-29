@@ -1,4 +1,4 @@
-package aibook.infra.dto;
+package aibook.domain;
 
 import lombok.Data;
 import java.util.List;
