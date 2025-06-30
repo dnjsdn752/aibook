@@ -43,7 +43,7 @@ public class Point {
     public static void gainRegisterPoint(UserRegistered userRegistered) {
         
         Point point = new Point();
-        point.setUserId(userRegistered.getUserId());
+        point.setUserId(userRegistered.getId());
         point.setPoint(1000);
         point.setIsSubscribe(false);
         repository().save(point);

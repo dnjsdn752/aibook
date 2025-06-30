@@ -9,12 +9,9 @@ import lombok.*;
 @ToString
 public class UserRegistered extends AbstractEvent {
 
-    private Long userId;
+    private Long id;
     private String email;
     private String userName;
     private String password;
 
-    public Long getUserId() {
-        return userId;
-    }
 }
