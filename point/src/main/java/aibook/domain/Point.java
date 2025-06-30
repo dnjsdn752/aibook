@@ -55,34 +55,41 @@ public class Point {
 
     //>>> Clean Arch / Port Method
     //<<< Clean Arch / Port Method
-    public static void decreasePoint(ReadingApplied readingApplied) {
-        repository().findByUserId(readingApplied.getUserId())
-        .ifPresent(point -> {
-            int usedPoint = readingApplied.getUsedPoint();
-            if (point.getPoint() >= usedPoint) {
-                point.setPoint(point.getPoint() - usedPoint);
-                point.setReadingId(readingApplied.getReadingId());
-                repository().save(point);
+    public static Point decreasePoint(ReadingApplied readingApplied) {
+        return repository().findByUserId(readingApplied.getUserId())
+            .map(point -> {
+                int usedPoint = readingApplied.getUsedPoint();
+                if (point.getPoint() >= usedPoint) {
+                        point.setPoint(point.getPoint() - readingApplied.getUsedPoint());
+                        point.setReadingId(readingApplied.getReadingId());
+                        repository().save(point);
 
-                PointDecreased pointDecreased = new PointDecreased(point);
-                pointDecreased.publishAfterCommit();
-            } else {
-                OutOfPoint outOfPoint = new OutOfPoint(point);
-                outOfPoint.publishAfterCommit();
-            }
-        });
+                        PointDecreased pointDecreased = new PointDecreased(point);
+                        pointDecreased.publishAfterCommit();
+
+                        return point;
+                } else {
+                    OutOfPoint outOfPoint = new OutOfPoint(point);
+                    outOfPoint.publishAfterCommit();
+                    return point;
+                }
+            })
+            .orElse(null);
     }
 
     //>>> Clean Arch / Port Method
     //<<< Clean Arch / Port Method
-    public static void increasePoint(ReadingCanceled readingCanceled) {
-        repository().findByUserId(readingCanceled.getUserId())
-        .ifPresent(point -> {
-            int refundPoint = readingCanceled.getRefundPoint();
-            point.setPoint(point.getPoint() + refundPoint);
-            repository().save(point);
-        });
+    public static Point increasePoint(ReadingCanceled readingCanceled) {
+        return repository().findByUserId(readingCanceled.getUserId())
+            .map(point -> {
+                int refundPoint = readingCanceled.getRefundPoint();
+                point.setPoint(point.getPoint() + refundPoint);
+                repository().save(point);
+                return point;
+            })
+            .orElse(null);
     }
+
     //>>> Clean Arch / Port Method
 
     public static Point buyPoint(PointCharged pointCharged) {
