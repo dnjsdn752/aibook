@@ -2,8 +2,6 @@ package aibook.infra;
 
 import aibook.config.kafka.KafkaProcessor;
 import aibook.domain.*;
-import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.StreamListener;
@@ -13,7 +11,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class ReadingPageViewHandler {
 
-    //<<< DDD / CQRS
     @Autowired
     private ReadingPageRepository readingPageRepository;
 
@@ -26,13 +23,18 @@ public class ReadingPageViewHandler {
 
             // view 객체 생성
             ReadingPage readingPage = new ReadingPage();
-            // view 객체에 이벤트의 Value 를 set 함
             readingPage.setId(readingApplied.getId());
-            readingPage.setUserId(Integer.valueOf(readingApplied.getUserId()));
-            readingPage.setBookId(Integer.valueOf(readingApplied.getBookId()));
+
+            // ✅ Long → Integer 변환 (.intValue())
+            readingPage.setUserId(readingApplied.getUserId().intValue());
+            readingPage.setBookId(readingApplied.getBookId().intValue());
+
             readingPage.setStartReading(readingApplied.getStartReading());
-            readingPage.setWebUrl(readingApplied.getWebUrl());
-            // view 레파지 토리에 save
+
+            // ✅ getter 이름 확인 (getWebURL())
+            readingPage.setWebUrl(readingApplied.getWebURL());
+
+            // 저장
             readingPageRepository.save(readingPage);
         } catch (Exception e) {
             e.printStackTrace();
@@ -45,7 +47,6 @@ public class ReadingPageViewHandler {
     ) {
         try {
             if (!readingCanceled.validate()) return;
-            // view 레파지 토리에 삭제 쿼리
             readingPageRepository.deleteById(readingCanceled.getId());
         } catch (Exception e) {
             e.printStackTrace();
@@ -58,11 +59,9 @@ public class ReadingPageViewHandler {
     ) {
         try {
             if (!readingFailed.validate()) return;
-            // view 레파지 토리에 삭제 쿼리
             readingPageRepository.deleteById(readingFailed.getId());
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    //>>> DDD / CQRS
 }

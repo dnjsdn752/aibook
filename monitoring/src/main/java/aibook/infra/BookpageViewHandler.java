@@ -53,6 +53,14 @@ public class BookpageViewHandler {
 
             if (bookpageOptional.isPresent()) {
                 Bookpage bookpage = bookpageOptional.get();
+
+            // ✅ 이벤트 값으로 업데이트
+                bookpage.setView(bookRegistered.getView());
+                bookpage.setIsBestseller(bookRegistered.getIsBestSeller());
+                bookpage.setBookName(bookRegistered.getBookName());
+                bookpage.setAiImage(bookRegistered.getAiImage());
+                bookpage.setAuthorName(bookRegistered.getAuthorName());
+                
                 // view 객체에 이벤트의 eventDirectValue 를 set 함
                 // view 레파지 토리에 save
                 bookpageRepository.save(bookpage);

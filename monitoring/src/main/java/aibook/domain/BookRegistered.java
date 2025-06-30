@@ -14,9 +14,13 @@ public class BookRegistered extends AbstractEvent {
     private String isBestSeller;
     private String authorName;
     private Long authorId;
-    private String ai_image;
+    private String aiImage;
     private String ai_summary;
     private String bookContent;
     private Integer view;
     private Date date;
+
+    public boolean validate() {
+        return this.id != null;
+    }
 }
