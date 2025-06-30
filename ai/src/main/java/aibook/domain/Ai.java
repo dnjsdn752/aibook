@@ -43,7 +43,7 @@ public class Ai {
     //<<< Clean Arch / Port Method
     public static void aiGenerate(AiRequested aiRequest) {
         Ai ai = new Ai();
-        ai.setManuscriptId(aiRequest.getManuscriptId());
+        ai.setManuscriptId(aiRequest.getId());
         ai.setAiImage(aiRequest.getAiImage());
         ai.setAiSummary(aiRequest.getAiSummary());
         ai.setTitle(aiRequest.getTitle());
