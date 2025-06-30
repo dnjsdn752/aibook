@@ -19,7 +19,7 @@ public class ReadingController {
     ReadingRepository readingRepository;
 
     @RequestMapping(
-        value = "/reading/apply",
+        value = "/reading",
         method = RequestMethod.POST,
         produces = "application/json;charset=UTF-8"
     )
@@ -38,7 +38,7 @@ public class ReadingController {
     }
 
     @RequestMapping(
-        value = "/reading/apply",
+        value = "/reading",
         method = RequestMethod.DELETE,
         produces = "application/json;charset=UTF-8"
     )

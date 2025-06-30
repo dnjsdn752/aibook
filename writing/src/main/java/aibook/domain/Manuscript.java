@@ -59,6 +59,7 @@ public class Manuscript {
         this.content = command.getContent();
         this.status = false;
         this.authorName = command.getAuthorName();
+        this.authorId = command.getAuthorId();
         this.date = new Date();
 
         ManuscriptRegistered manuscriptRegistered = new ManuscriptRegistered(this);

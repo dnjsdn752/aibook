@@ -73,4 +73,3 @@ public class Reading {
         repository().delete(reading);
     }
 }
-    
