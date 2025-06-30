@@ -12,15 +12,15 @@ import lombok.*;
 public class PointBought extends AbstractEvent {
 
     private Long id;
-    private Integer point;
-    private UserId userId;
+    private Integer totalPoint;
+    private Long userId;
+    private Integer boughtAmount;
 
-    public PointBought(Point aggregate) {
-        super(aggregate);
-    }
-
-    public PointBought() {
-        super();
+    public PointBought(Point point, int boughtAmount) {
+        super(point);
+        this.userId = point.getUserId();
+        this.totalPoint = point.getPoint();
+        this.boughtAmount = boughtAmount;
     }
 }
 //>>> DDD / Domain Event

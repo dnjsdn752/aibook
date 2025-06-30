@@ -28,11 +28,9 @@ public class Point {
 
     private Boolean isSubscribe;
 
-    @Embedded
-    private ReadingId readingId;
+    private Long readingId;
 
-    @Embedded
-    private UserId userId;
+    private Long userId;
 
     public static PointRepository repository() {
         PointRepository pointRepository = PointApplication.applicationContext.getBean(
@@ -43,100 +41,76 @@ public class Point {
 
     //<<< Clean Arch / Port Method
     public static void gainRegisterPoint(UserRegistered userRegistered) {
-        //implement business logic here:
-
-        /** Example 1:  new item 
+        
         Point point = new Point();
+        point.setUserId(userRegistered.getUserId());
+        point.setPoint(1000);
+        point.setIsSubscribe(false);
         repository().save(point);
 
         RegisterPointGained registerPointGained = new RegisterPointGained(point);
         registerPointGained.publishAfterCommit();
-        */
-
-        /** Example 2:  finding and process
-        
-
-        repository().findById(userRegistered.get???()).ifPresent(point->{
-            
-            point // do something
-            repository().save(point);
-
-            RegisterPointGained registerPointGained = new RegisterPointGained(point);
-            registerPointGained.publishAfterCommit();
-
-         });
-        */
 
     }
 
     //>>> Clean Arch / Port Method
     //<<< Clean Arch / Port Method
     public static void decreasePoint(ReadingApplied readingApplied) {
-        //implement business logic here:
+        repository().findByUserId(readingApplied.getUserId())
+        .ifPresent(point -> {
+            int usedPoint = readingApplied.getUsedPoint();
+            if (point.getPoint() >= usedPoint) {
+                point.setPoint(point.getPoint() - usedPoint);
+                point.setReadingId(readingApplied.getReadingId());
+                repository().save(point);
 
-        /** Example 1:  new item 
-        Point point = new Point();
-        repository().save(point);
-
-        PointDecreased pointDecreased = new PointDecreased(point);
-        pointDecreased.publishAfterCommit();
-        OutOfPoint outOfPoint = new OutOfPoint(point);
-        outOfPoint.publishAfterCommit();
-        */
-
-        /** Example 2:  finding and process
-        
-        // if readingApplied.userIdbookId exists, use it
-        
-        // ObjectMapper mapper = new ObjectMapper();
-        // Map<Long, Object> readingMap = mapper.convertValue(readingApplied.getUserId(), Map.class);
-        // Map<Long, Object> readingMap = mapper.convertValue(readingApplied.getBookId(), Map.class);
-
-        repository().findById(readingApplied.get???()).ifPresent(point->{
-            
-            point // do something
-            repository().save(point);
-
-            PointDecreased pointDecreased = new PointDecreased(point);
-            pointDecreased.publishAfterCommit();
-            OutOfPoint outOfPoint = new OutOfPoint(point);
-            outOfPoint.publishAfterCommit();
-
-         });
-        */
-
+                PointDecreased pointDecreased = new PointDecreased(point);
+                pointDecreased.publishAfterCommit();
+            } else {
+                OutOfPoint outOfPoint = new OutOfPoint(point);
+                outOfPoint.publishAfterCommit();
+            }
+        });
     }
 
     //>>> Clean Arch / Port Method
     //<<< Clean Arch / Port Method
     public static void increasePoint(ReadingCanceled readingCanceled) {
-        //implement business logic here:
-
-        /** Example 1:  new item 
-        Point point = new Point();
-        repository().save(point);
-
-        */
-
-        /** Example 2:  finding and process
-        
-        // if readingCanceled.userIdbookId exists, use it
-        
-        // ObjectMapper mapper = new ObjectMapper();
-        // Map<Long, Object> readingMap = mapper.convertValue(readingCanceled.getUserId(), Map.class);
-        // Map<Long, Object> readingMap = mapper.convertValue(readingCanceled.getBookId(), Map.class);
-
-        repository().findById(readingCanceled.get???()).ifPresent(point->{
-            
-            point // do something
+        repository().findByUserId(readingCanceled.getUserId())
+        .ifPresent(point -> {
+            int refundPoint = readingCanceled.getRefundPoint();
+            point.setPoint(point.getPoint() + refundPoint);
             repository().save(point);
-
-
-         });
-        */
-
+        });
     }
     //>>> Clean Arch / Port Method
+
+    public static Point buyPoint(PointCharged pointCharged) {
+        return repository().findByUserId(pointCharged.getUserId())
+            .map(point -> {
+                point.setPoint(point.getPoint() + pointCharged.getAmount());
+                repository().save(point);
+
+                PointBought event = new PointBought(point, pointCharged.getAmount());
+                event.publishAfterCommit();
+
+                return point;
+            })
+            .orElseGet(() -> {
+                Point point = new Point();
+                point.setUserId(pointCharged.getUserId());
+                point.setPoint(pointCharged.getAmount());
+                point.setIsSubscribe(false);
+                repository().save(point);
+
+                PointBought event = new PointBought(point, pointCharged.getAmount());
+                event.publishAfterCommit();
+
+                return point;
+            });
+}
+
+
 
 }
 //>>> DDD / Aggregate Root
