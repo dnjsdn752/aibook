@@ -11,12 +11,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
 
 //<<< Clean Arch / Inbound Adaptor
 @Service
 @Transactional
 public class PolicyHandler {
 
+    @Autowired
+    LlmService llmService;
+    
     @Autowired
     AiRepository aiRepository;
 
@@ -34,7 +38,8 @@ public class PolicyHandler {
         );
 
         // Sample Logic //
-        Ai.aiGenerate(event);
+        //Ai.aiGenerate(event);
+        llmService.callLlmAndSave(aiRequest);
     }
 }
 //>>> Clean Arch / Inbound Adaptor
