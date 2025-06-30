@@ -41,28 +41,25 @@ mvn spring-boot:run
 ## Test by API
 - author
 ```
- http :8088/authors id="id"email="email"authorName="authorName"introduction="introduction"featuredWorks="featuredWorks"isApprove="isApprove"
+작가 요청 - http :8082/authors email="email" authorName="authorName" introduction="introduction" featuredWorks="featuredWorks"
+작가 승인 - http PUT :8082/authors/1/approveauthor
+작가 비승인 - http PUT :8082/authors/1/disapproveauthor
 ```
 - subscriber
 ```
- http :8088/users id="id"email="email"userName="userName"password="password"isSubscription="isSubscription"
- http :8088/readings id="id"isReading="isReading"startReading="startReading"webUrl="webURL"
+대여 신청 - http :8083/reading userId=1 bookId=1
+대여 취소 - http DELETE :8083/reading id=1 userId=1 bookId=1
 ```
 - writing
 ```
- http :8088/manuscripts id="id"authorId="authorId"title="title"content="content"authorName="authorName"date="date"aiImage="ai_image"aiSummary="ai_summary"
+집필 등록 - http :8084/manuscripts/registermanuscript title="신데렐라" content="이벤트 발행 테스트" authorId=123 authorName="윤원우"
+집필 수정 - http PUT :8084/manuscripts/1/editmanuscript title="신데렐라2" content="수정된 내용22"
+AI요청 - http PUT :8084/manuscripts/1/requestai
+출간 요청 - http PUT :8084/manuscripts/1/requestpublishing
 ```
 - point
 ```
- http :8088/points id="id"point="point"isSubscribe="isSubscribe"
-```
-- platform
-```
- http :8088/books id="id"authorId="authorId"bookName="bookName"category="category"isBestSeller="isBestSeller"authorName="authorName"aiImage="ai_image"aiSummary="ai_summary"bookContent="bookContent"view="view"date="date"
-```
-- ai
-```
- http :8088/ais id="id"manuscriptId="manuscriptId"aiImage="ai_image"aiSummary="ai_summary"title="title"authorId="authorId"content="content"
+ 추가 필요
 ```
 - monitoring
 ```
