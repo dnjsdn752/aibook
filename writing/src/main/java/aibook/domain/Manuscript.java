@@ -32,19 +32,19 @@ public class Manuscript {
 
     private String aiSummary;
 
-    @PostPersist
-    public void onPostPersist() {
-        // 원고 등록 이벤트 발행
-        ManuscriptRegistered manuscriptRegistered = new ManuscriptRegistered(this);
-        manuscriptRegistered.publishAfterCommit();
-    }
+    // @PostPersist
+    // public void onPostPersist() {
+    //     // 원고 등록 이벤트 발행
+    //     ManuscriptRegistered manuscriptRegistered = new ManuscriptRegistered(this);
+    //     manuscriptRegistered.publishAfterCommit();
+    // }
 
-    @PostUpdate
-    public void onPostUpdate() {
-        // 원고 수정 이벤트 발행
-        ManuscriptEdited manuscriptEdited = new ManuscriptEdited(this);
-        manuscriptEdited.publishAfterCommit();
-    }
+    // @PostUpdate
+    // public void onPostUpdate() {
+    //     // 원고 수정 이벤트 발행
+    //     ManuscriptEdited manuscriptEdited = new ManuscriptEdited(this);
+    //     manuscriptEdited.publishAfterCommit();
+    // }
 
     public static ManuscriptRepository repository() {
         ManuscriptRepository manuscriptRepository = WritingApplication.applicationContext.getBean(
