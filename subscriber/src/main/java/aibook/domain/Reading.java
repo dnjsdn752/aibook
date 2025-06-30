@@ -33,21 +33,6 @@ public class Reading {
 
     private Long bookId;
 
-    @PostPersist
-    public void onPostPersist() {
-        ReadingApplied readingApplied = new ReadingApplied(this);
-        readingApplied.publishAfterCommit();
-
-        ReadingFailed readingFailed = new ReadingFailed(this);
-        readingFailed.publishAfterCommit();
-    }
-
-    @PreRemove
-    public void onPreRemove() {
-        ReadingCanceled readingCanceled = new ReadingCanceled(this);
-        readingCanceled.publishAfterCommit();
-    }
-
     public static ReadingRepository repository() {
         ReadingRepository readingRepository = SubscriberApplication.applicationContext.getBean(
             ReadingRepository.class
@@ -72,9 +57,10 @@ public class Reading {
             () -> new EntityNotFoundException("해당 ID의 Reading이 존재하지 않습니다: "));
         
         ReadingCanceled readingApplied = new ReadingCanceled(reading);
+        repository().delete(reading);
         readingApplied.publishAfterCommit();
 
-        repository().delete(reading);
+        
     }
     
     public static void failSubscription(OutOfPoint outOfPoint) {
@@ -88,4 +74,3 @@ public class Reading {
     }
 }
     
-//>>> DDD / Aggregate Root

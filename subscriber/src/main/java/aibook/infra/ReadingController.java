@@ -32,8 +32,9 @@ public class ReadingController {
             "##### /reading/apply  called #####"
         );
         Reading reading = new Reading();
+        readingRepository.save(reading);
         reading.readingApplied(readingAppliedCommand);
-        return readingRepository.save(reading);
+        return reading;
     }
 
     @RequestMapping(
