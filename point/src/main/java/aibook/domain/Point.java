@@ -85,5 +85,32 @@ public class Point {
     }
     //>>> Clean Arch / Port Method
 
+    public static Point buyPoint(PointCharged pointCharged) {
+        return repository().findByUserId(pointCharged.getUserId())
+            .map(point -> {
+                point.setPoint(point.getPoint() + pointCharged.getAmount());
+                repository().save(point);
+
+                PointBought event = new PointBought(point, pointCharged.getAmount());
+                event.publishAfterCommit();
+
+                return point;
+            })
+            .orElseGet(() -> {
+                Point point = new Point();
+                point.setUserId(pointCharged.getUserId());
+                point.setPoint(pointCharged.getAmount());
+                point.setIsSubscribe(false);
+                repository().save(point);
+
+                PointBought event = new PointBought(point, pointCharged.getAmount());
+                event.publishAfterCommit();
+
+                return point;
+            });
+}
+
+
+
 }
 //>>> DDD / Aggregate Root
