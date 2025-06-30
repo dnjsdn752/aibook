@@ -66,39 +66,26 @@ public class Reading {
         readingApplied.publishAfterCommit();
 
     }
+
+    public static void readingCanceled(ReadingCanceledCommand command){
+        Reading reading = repository().findById(command.getId()).orElseThrow(
+            () -> new EntityNotFoundException("해당 ID의 Reading이 존재하지 않습니다: "));
+        
+        ReadingCanceled readingApplied = new ReadingCanceled(reading);
+        readingApplied.publishAfterCommit();
+
+        repository().delete(reading);
+    }
     
     public static void failSubscription(OutOfPoint outOfPoint) {
-        //implement business logic here:
-
-        /** Example 1:  new item 
-        Reading reading = new Reading();
-        repository().save(reading);
+        Reading reading = repository().findById(outOfPoint.getId()).orElseThrow(
+            () -> new EntityNotFoundException("해당 ID의 Reading이 존재하지 않습니다: "));
 
         ReadingFailed readingFailed = new ReadingFailed(reading);
         readingFailed.publishAfterCommit();
-        */
 
-        /** Example 2:  finding and process
-        
-        // if outOfPoint.readingIduserId exists, use it
-        
-        // ObjectMapper mapper = new ObjectMapper();
-        // Map<Long, Object> pointMap = mapper.convertValue(outOfPoint.getReadingId(), Map.class);
-        // Map<Long, Object> pointMap = mapper.convertValue(outOfPoint.getUserId(), Map.class);
-
-        repository().findById(outOfPoint.get???()).ifPresent(reading->{
-            
-            reading // do something
-            repository().save(reading);
-
-            ReadingFailed readingFailed = new ReadingFailed(reading);
-            readingFailed.publishAfterCommit();
-
-         });
-        */
-
+        repository().delete(reading);
     }
-    //>>> Clean Arch / Port Method
-
 }
+    
 //>>> DDD / Aggregate Root
