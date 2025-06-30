@@ -2,6 +2,8 @@ package aibook.infra;
 
 import aibook.config.kafka.KafkaProcessor;
 import aibook.domain.*;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.StreamListener;
@@ -15,28 +17,32 @@ public class ReadingPageViewHandler {
     private ReadingPageRepository readingPageRepository;
 
     @StreamListener(KafkaProcessor.INPUT)
-    public void whenReadingApplied_then_CREATE_1(
-        @Payload ReadingApplied readingApplied
-    ) {
+    public void whenEventReceived(@Payload String messageJson) {
         try {
-            if (!readingApplied.validate()) return;
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(messageJson);
 
-            // view 객체 생성
-            ReadingPage readingPage = new ReadingPage();
-            readingPage.setId(readingApplied.getId());
+            String eventType = jsonNode.get("type").asText();
 
-            // ✅ Long → Integer 변환 (.intValue())
-            readingPage.setUserId(readingApplied.getUserId().intValue());
-            readingPage.setBookId(readingApplied.getBookId().intValue());
+            if ("ReadingApplied".equals(eventType)) {
+                ReadingApplied readingApplied = objectMapper.treeToValue(jsonNode, ReadingApplied.class);
 
-            readingPage.setStartReading(readingApplied.getStartReading());
+                if (!readingApplied.validate()) return;
 
-            // ✅ getter 이름 확인 (getWebURL())
-            readingPage.setWebUrl(readingApplied.getWebURL());
+                ReadingPage readingPage = new ReadingPage();
+                readingPage.setId(readingApplied.getId());
+                readingPage.setUserId(readingApplied.getUserId().intValue());
+                readingPage.setBookId(readingApplied.getBookId().intValue());
+                readingPage.setStartReading(readingApplied.getStartReading());
+                readingPage.setWebUrl(readingApplied.getWebUrl());
 
-            // 저장
-            readingPageRepository.save(readingPage);
+                readingPageRepository.save(readingPage);
+
+                System.out.println("📩 ReadingApplied 이벤트 수신 및 저장 완료: " + readingApplied);
+            }
+
         } catch (Exception e) {
+            System.err.println("❌ 이벤트 처리 중 예외 발생:");
             e.printStackTrace();
         }
     }

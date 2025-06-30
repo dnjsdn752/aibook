@@ -14,4 +14,6 @@ public class ReadingCanceled extends AbstractEvent {
     private Boolean isReading;
     private Date startReading;
     private String webURL;
+
+    
 }

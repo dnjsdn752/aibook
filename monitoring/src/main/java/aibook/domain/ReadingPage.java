@@ -15,9 +15,10 @@ public class ReadingPage {
     @Id
     //@GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
-
     private Integer userId;
     private Integer bookId;
     private Date startReading;
     private String webUrl;
+
+    
 }
