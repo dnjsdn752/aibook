@@ -19,4 +19,11 @@ public class AiRequested extends AbstractEvent {
     private String aiSummary;
     private Long manuscriptId;
 
+    public AiRequested(Object aggregate) {
+        super(aggregate);
+    }
+
+    public AiRequested() {
+        super();
+    }
 }

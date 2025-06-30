@@ -42,9 +42,6 @@ public class Ai {
 
     //<<< Clean Arch / Port Method
     public static void aiGenerate(AiRequested aiRequest) {
-        //implement business logic here:
-
-        
         Ai ai = new Ai();
         ai.setManuscriptId(aiRequest.getManuscriptId());
         ai.setAiImage(aiRequest.getAiImage());
@@ -53,14 +50,10 @@ public class Ai {
         ai.setAuthorId(aiRequest.getAuthorId());
         ai.setContent(aiRequest.getContent());
 
-
         repository().save(ai);
 
         AiGenerated aiGenerated = new AiGenerated(ai);
-        aiGenerated.publishAfterCommit();
-        
-
-
+        aiGenerated.publish(); // <=== 여기 바꾸기
     }
     //>>> Clean Arch / Port Method
 
