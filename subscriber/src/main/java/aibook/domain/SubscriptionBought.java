@@ -16,6 +16,8 @@ public class SubscriptionBought extends AbstractEvent {
 
     public SubscriptionBought(User aggregate) {
         super(aggregate);
+        this.id = aggregate.getId();
+        this.isSubscription = aggregate.getIsSubscription();
     }
 
     public SubscriptionBought() {
