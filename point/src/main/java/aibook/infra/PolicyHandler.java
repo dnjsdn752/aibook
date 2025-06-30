@@ -52,6 +52,7 @@ public class PolicyHandler {
         );
 
         // Sample Logic //
+        event.setUsedPoint(500);
         Point.decreasePoint(event);
     }
 
@@ -72,6 +73,7 @@ public class PolicyHandler {
         // pointService.getPoint(/** mapping value needed */);
 
         // Sample Logic //
+        event.setRefundPoint(500);
         Point.increasePoint(event);
     }
 }

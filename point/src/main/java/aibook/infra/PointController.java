@@ -18,19 +18,25 @@ public class PointController {
     @Autowired
     PointRepository pointRepository;
 
+    @GetMapping("/{userId}")
+    public Point getPointByUserId(@PathVariable Long userId) {
+        return pointRepository.findByUserId(userId).orElse(null);
+    }
+
+
     @PostMapping("/users/registered")
     public void userRegistered(@RequestBody UserRegistered event) {
         Point.gainRegisterPoint(event);
     }
 
     @PostMapping("/readings/applied")
-    public void readingApplied(@RequestBody ReadingApplied event) {
-        Point.decreasePoint(event);
+    public Point readingApplied(@RequestBody ReadingApplied event) {
+        return Point.decreasePoint(event);
     }
 
     @PostMapping("/readings/canceled")
-    public void readingCanceled(@RequestBody ReadingCanceled event) {
-        Point.increasePoint(event);
+    public Point readingCanceled(@RequestBody ReadingCanceled event) {
+        return Point.increasePoint(event);
     }
 
     @PostMapping("/charged")
