@@ -30,7 +30,6 @@ public class AuthorController {
     )
     public Author approveAuthor(
         @PathVariable(value = "id") Long id,
-        @RequestBody ApproveAuthorCommand approveAuthorCommand,
         HttpServletRequest request,
         HttpServletResponse response
     ) throws Exception {
@@ -39,7 +38,7 @@ public class AuthorController {
 
         optionalAuthor.orElseThrow(() -> new Exception("No Entity Found"));
         Author author = optionalAuthor.get();
-        author.approveAuthor(approveAuthorCommand);
+        author.approveAuthor();
 
         authorRepository.save(author);
         return author;
@@ -52,7 +51,6 @@ public class AuthorController {
     )
     public Author disapproveAuthor(
         @PathVariable(value = "id") Long id,
-        @RequestBody DisapproveAuthorCommand disapproveAuthorCommand,
         HttpServletRequest request,
         HttpServletResponse response
     ) throws Exception {
@@ -61,7 +59,7 @@ public class AuthorController {
 
         optionalAuthor.orElseThrow(() -> new Exception("No Entity Found"));
         Author author = optionalAuthor.get();
-        author.disapproveAuthor(disapproveAuthorCommand);
+        author.disapproveAuthor();
 
         authorRepository.save(author);
         return author;

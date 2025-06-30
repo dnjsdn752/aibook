@@ -62,7 +62,7 @@ public class Author {
 
 
     //<<< Clean Arch / Port Method
-    public void approveAuthor(ApproveAuthorCommand approveAuthorCommand) {
+    public void approveAuthor() {
         //implement business logic here:
         this.setIsApprove(true);
 
@@ -72,9 +72,7 @@ public class Author {
 
     //>>> Clean Arch / Port Method
     //<<< Clean Arch / Port Method
-    public void disapproveAuthor(
-        DisapproveAuthorCommand disapproveAuthorCommand
-    ) {
+    public void disapproveAuthor() {
         //implement business logic here:
         this.setIsApprove(false);
         
