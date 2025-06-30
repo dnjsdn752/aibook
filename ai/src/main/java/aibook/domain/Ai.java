@@ -44,27 +44,22 @@ public class Ai {
     public static void aiGenerate(AiRequest aiRequest) {
         //implement business logic here:
 
-        /** Example 1:  new item 
+        
         Ai ai = new Ai();
+        ai.setManuscriptId(aiRequest.getManuscriptId());
+        ai.setAiImage(aiRequest.getAiImage());
+        ai.setAiSummary(aiRequest.getAiSummary());
+        ai.setTitle(aiRequest.getTitle());
+        ai.setAuthorId(aiRequest.getAuthorId());
+        ai.setContent(aiRequest.getContent());
+
+
         repository().save(ai);
 
         AiGenerated aiGenerated = new AiGenerated(ai);
         aiGenerated.publishAfterCommit();
-        */
-
-        /** Example 2:  finding and process
         
 
-        repository().findById(aiRequest.get???()).ifPresent(ai->{
-            
-            ai // do something
-            repository().save(ai);
-
-            AiGenerated aiGenerated = new AiGenerated(ai);
-            aiGenerated.publishAfterCommit();
-
-         });
-        */
 
     }
     //>>> Clean Arch / Port Method

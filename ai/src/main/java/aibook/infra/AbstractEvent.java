@@ -10,9 +10,11 @@ import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.transaction.support.TransactionSynchronizationAdapter;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.util.MimeTypeUtils;
 
 //<<< Clean Arch / Outbound Adaptor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class AbstractEvent {
 
     String eventType;
