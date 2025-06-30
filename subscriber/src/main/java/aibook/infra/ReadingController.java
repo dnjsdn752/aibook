@@ -38,7 +38,7 @@ public class ReadingController {
 
     @RequestMapping(
         value = "/reading/apply",
-        method = RequestMethod.POST,
+        method = RequestMethod.DELETE,
         produces = "application/json;charset=UTF-8"
     )
     public void readingCancel(
@@ -50,7 +50,7 @@ public class ReadingController {
             "##### /reading/apply  called #####"
         );
         Reading.readingCanceled(readingCanceledCommand);
-        //return readingRepository.save(reading);
+        
     }
 }
 
