@@ -10,6 +10,7 @@ import lombok.*;
 public class PointDecreased extends AbstractEvent {
 
     private Long id;
+    private Long bookId;
     private Integer point;
     private Object userId;
 }
