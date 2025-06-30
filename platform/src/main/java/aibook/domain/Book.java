@@ -69,19 +69,31 @@ public class Book {
     }
 
     
-    public static void viewCount(ReadingCanceled readingCanceled,Boolean isIncrease) {
+    public static void viewCount(ReadingCanceled readingCanceled) {
         Book book = repository().findById(readingCanceled.getBookId()).orElseThrow(
             () -> new EntityNotFoundException("해당 ID의 Book이 존재하지 않습니다: "));
         int view = book.getView();
 
-        if(isIncrease){
-            book.setView(view + 1);
-        }else{
-            if(view > 0)
-                book.setView(view-1);
-            else
-                book.setView(0);
-        }
+        if(view > 0)
+            book.setView(view-1);
+        else
+            book.setView(0);
+        
+        if(book.getView() >= 5)
+            book.setIsBestSeller(true);
+        else
+            book.setIsBestSeller(false);
+
+        BadgeGranted badgeGranted = new BadgeGranted(book);
+        badgeGranted.publishAfterCommit();
+    }
+
+    public static void viewCount(PointDecreased pointDecreased) {
+        Book book = repository().findById(pointDecreased.getBookId()).orElseThrow(
+            () -> new EntityNotFoundException("해당 ID의 Book이 존재하지 않습니다: "));
+
+        book.setView(book.getView() + 1);
+        
         if(book.getView() >= 5)
             book.setIsBestSeller(true);
         else

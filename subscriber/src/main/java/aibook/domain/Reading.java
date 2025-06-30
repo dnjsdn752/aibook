@@ -29,26 +29,9 @@ public class Reading {
 
     private String webUrl;
 
-    @Embedded
-    private UserId userId;
+    private Long userId;
 
-    @Embedded
-    private BookId bookId;
-
-    @PostPersist
-    public void onPostPersist() {
-        ReadingApplied readingApplied = new ReadingApplied(this);
-        readingApplied.publishAfterCommit();
-
-        ReadingFailed readingFailed = new ReadingFailed(this);
-        readingFailed.publishAfterCommit();
-    }
-
-    @PreRemove
-    public void onPreRemove() {
-        ReadingCanceled readingCanceled = new ReadingCanceled(this);
-        readingCanceled.publishAfterCommit();
-    }
+    private Long bookId;
 
     public static ReadingRepository repository() {
         ReadingRepository readingRepository = SubscriberApplication.applicationContext.getBean(
@@ -56,40 +39,38 @@ public class Reading {
         );
         return readingRepository;
     }
+    public void readingApplied(ReadingAppliedCommand command){
+        this.isReading = false;
+        this.startReading = new Date();
+        this.webUrl = null;
+        this.userId = command.getUserId();
+        this.bookId = command.getBookId();
 
-    //<<< Clean Arch / Port Method
+
+        ReadingApplied readingApplied = new ReadingApplied(this);
+        readingApplied.publishAfterCommit();
+
+    }
+
+    public static void readingCanceled(ReadingCanceledCommand command){
+        Reading reading = repository().findById(command.getId()).orElseThrow(
+            () -> new EntityNotFoundException("해당 ID의 Reading이 존재하지 않습니다: "));
+        
+        ReadingCanceled readingApplied = new ReadingCanceled(reading);
+        repository().delete(reading);
+        readingApplied.publishAfterCommit();
+
+        
+    }
+    
     public static void failSubscription(OutOfPoint outOfPoint) {
-        //implement business logic here:
-
-        /** Example 1:  new item 
-        Reading reading = new Reading();
-        repository().save(reading);
+        Reading reading = repository().findById(outOfPoint.getId()).orElseThrow(
+            () -> new EntityNotFoundException("해당 ID의 Reading이 존재하지 않습니다: "));
 
         ReadingFailed readingFailed = new ReadingFailed(reading);
         readingFailed.publishAfterCommit();
-        */
 
-        /** Example 2:  finding and process
-        
-        // if outOfPoint.readingIduserId exists, use it
-        
-        // ObjectMapper mapper = new ObjectMapper();
-        // Map<Long, Object> pointMap = mapper.convertValue(outOfPoint.getReadingId(), Map.class);
-        // Map<Long, Object> pointMap = mapper.convertValue(outOfPoint.getUserId(), Map.class);
-
-        repository().findById(outOfPoint.get???()).ifPresent(reading->{
-            
-            reading // do something
-            repository().save(reading);
-
-            ReadingFailed readingFailed = new ReadingFailed(reading);
-            readingFailed.publishAfterCommit();
-
-         });
-        */
-
+        repository().delete(reading);
     }
-    //>>> Clean Arch / Port Method
-
 }
-//>>> DDD / Aggregate Root
+    

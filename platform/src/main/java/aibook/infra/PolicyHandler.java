@@ -56,7 +56,7 @@ public class PolicyHandler {
         // 비즈니스 로직은 aggregate에서 작성 후 불러오기
 
         // Sample Logic //
-        Book.viewCount(event,false);
+        Book.viewCount(event);
     }
 
     @StreamListener(
@@ -76,7 +76,7 @@ public class PolicyHandler {
         // 비즈니스 로직은 aggregate에서 작성 후 불러오기
 
         // Sample Logic //
-        Book.viewCount(event,true);
+        Book.viewCount(event);
     }
 }
 //>>> Clean Arch / Inbound Adaptor

@@ -11,5 +11,6 @@ public class OutOfPoint extends AbstractEvent {
 
     private Long id;
     private Integer point;
+    private Long readingId;
     private Object userId;
 }
