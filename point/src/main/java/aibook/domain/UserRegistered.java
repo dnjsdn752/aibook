@@ -14,4 +14,7 @@ public class UserRegistered extends AbstractEvent {
     private String userName;
     private String password;
 
+    public Long getUserId() {
+        return userId;
+    }
 }

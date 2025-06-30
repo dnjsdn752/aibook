@@ -41,7 +41,8 @@ public class Point {
 
     //<<< Clean Arch / Port Method
     public static void gainRegisterPoint(UserRegistered userRegistered) {
-        
+        System.out.println("[gainRegisterPoint] userId: " + userRegistered.getUserId());
+
         Point point = new Point();
         point.setUserId(userRegistered.getId());
         point.setPoint(1000);

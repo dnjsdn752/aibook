@@ -16,13 +16,22 @@ public class UserRegistered extends AbstractEvent {
     private String userName;
     private String password;
 
-    public UserRegistered(User aggregate) {
-        super(aggregate);
-        this.id = aggregate.getId();
-        this.email = aggregate.getEmail();
-        this.userName = aggregate.getUserName();
-        this.password = aggregate.getPassword();
+    // public UserRegistered(User aggregate) {
+    //     super(aggregate);
+    //     this.id = aggregate.getId();
+    //     this.email = aggregate.getEmail();
+    //     this.userName = aggregate.getUserName();
+    //     this.password = aggregate.getPassword();
+    // }
+
+    public UserRegistered(Long id, String email, String userName, String password) {
+        super();
+        this.id = id;
+        this.email = email;
+        this.userName = userName;
+        this.password = password;
     }
+
 
     public UserRegistered() {
         super();
