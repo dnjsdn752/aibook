@@ -7,7 +7,7 @@ import lombok.*;
 
 @Data
 @ToString
-public class AiRequest extends AbstractEvent {
+public class AiRequested extends AbstractEvent {
 
     private Long id;
     private Long authorId;

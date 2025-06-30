@@ -1,7 +1,8 @@
 package aibook.infra;
 
 import aibook.domain.Ai;
-import aibook.domain.AiRequest;
+import aibook.domain.AiRequested;
+
 //import aibook.infra.dto.OpenAiResponse;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,7 +24,7 @@ public class LlmService {
     @Value("${llm.api.key}")
     private String llmApiKey;
 
-    public void callLlmAndSave(AiRequest request) {
+    public void callLlmAndSave(AiRequested request) {
         WebClient.create()
             .post()
             .uri(llmApiUrl)

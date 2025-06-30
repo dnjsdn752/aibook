@@ -29,10 +29,10 @@ public class PolicyHandler {
 
     @StreamListener(
         value = KafkaProcessor.INPUT,
-        condition = "headers['type']=='AiRequest'"
+        condition = "headers['type']=='AiRequested'"
     )
-    public void wheneverAiRequest_AiGenerate(@Payload AiRequest aiRequest) {
-        AiRequest event = aiRequest;
+    public void wheneverAiRequest_AiGenerate(@Payload AiRequested aiRequest) {
+        AiRequested event = aiRequest;
         System.out.println(
             "\n\n##### listener AiGenerate : " + aiRequest + "\n\n"
         );

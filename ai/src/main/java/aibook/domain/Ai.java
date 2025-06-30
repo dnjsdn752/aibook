@@ -41,7 +41,7 @@ public class Ai {
     }
 
     //<<< Clean Arch / Port Method
-    public static void aiGenerate(AiRequest aiRequest) {
+    public static void aiGenerate(AiRequested aiRequest) {
         //implement business logic here:
 
         

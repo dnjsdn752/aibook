@@ -28,7 +28,7 @@ public class AiController {
     public ResponseEntity<?> generateAi(@PathVariable Long id) {
         Ai ai = aiRepository.findById(id).orElseThrow();
 
-        AiRequest request = new AiRequest();
+        AiRequested request = new AiRequested();
         request.setId(ai.getManuscriptId());
         request.setTitle(ai.getTitle());
         request.setContent(ai.getContent());
