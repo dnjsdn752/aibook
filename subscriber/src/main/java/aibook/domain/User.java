@@ -33,8 +33,13 @@ public class User {
 
     @PostPersist
     public void onPostPersist() {
-        UserRegistered userRegistered = new UserRegistered(this);
-        userRegistered.publishAfterCommit();
+        UserRegistered userRegistered = new UserRegistered(
+        this.getId(),
+        this.getEmail(),
+        this.getUserName(),
+        this.getPassword()
+    );
+    userRegistered.publishAfterCommit();
     }
 
     public static UserRepository repository() {
