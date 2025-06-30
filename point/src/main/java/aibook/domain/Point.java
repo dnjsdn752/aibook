@@ -90,6 +90,7 @@ public class Point {
             .orElse(null);
     }
 
+
     //>>> Clean Arch / Port Method
 
     public static Point buyPoint(PointCharged pointCharged) {
