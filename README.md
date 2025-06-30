@@ -47,6 +47,9 @@ mvn spring-boot:run
 ```
 - subscriber
 ```
+구독자 가입 - http :8083/users email="email" userName="민수야" password="123" isSubscription="false"
+구독권 구매 - http PUT :8083/users/{id}/buysubscription isSubscription="true"
+--------------------------------------------------------------
 대여 신청 - http :8083/reading userId=1 bookId=1
 대여 취소 - http DELETE :8083/reading id=1 userId=1 bookId=1
 ```
@@ -59,7 +62,8 @@ AI요청 - http PUT :8084/manuscripts/1/requestai
 ```
 - point
 ```
- 추가 필요
+포인트 구매 - http POST localhost:8085/points/charged userId=1 amount=3000
+대여 후 포인트 확인 - http GET localhost:8085/points/1
 ```
 - monitoring
 ```
