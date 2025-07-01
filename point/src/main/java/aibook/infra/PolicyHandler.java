@@ -56,6 +56,7 @@ public class PolicyHandler {
         Point.decreasePoint(event);
     }
 
+
     @StreamListener(
         value = KafkaProcessor.INPUT,
         condition = "headers['type']=='ReadingCanceled'"
@@ -75,6 +76,22 @@ public class PolicyHandler {
         // Sample Logic //
         event.setRefundPoint(500);
         Point.increasePoint(event);
+    }
+
+    @StreamListener(
+        value = KafkaProcessor.INPUT,
+        condition = "headers['type']=='SubscriptionBought'"
+    )
+    public void wheneverSubscriptionBought_UpdateSubscription(
+        @Payload UpdateSubscription updateSubscription
+    ) {
+        UpdateSubscription event = updateSubscription;
+        System.out.println(
+            "\n\n##### listener IncreasePoint : " + updateSubscription + "\n\n"
+        );
+
+        
+        Point.update_Subscrib(event);
     }
 }
 //>>> Clean Arch / Inbound Adaptor
