@@ -31,9 +31,10 @@ public class Book {
     private Boolean isBestSeller;
 
     private String authorName;
-
+    
+    @Column(length = 1000)
     private String aiImage;
-
+    @Column(length = 1000)
     private String aiSummary;
     
     @Column(length = 1000)
