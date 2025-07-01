@@ -6,7 +6,7 @@ llm:
     url:  
       chat: https://api.openai.com/v1/chat/completions
       image: https://api.openai.com/v1/images/generations
-    key: #
+    key: # api키 연결하는 부분
 spring:
   application:
     name: ai
