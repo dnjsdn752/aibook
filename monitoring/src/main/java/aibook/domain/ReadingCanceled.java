@@ -13,7 +13,5 @@ public class ReadingCanceled extends AbstractEvent {
     private Long bookId;
     private Boolean isReading;
     private Date startReading;
-    private String webURL;
-
-    
+    private String WebUrl;
 }

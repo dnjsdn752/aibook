@@ -2,8 +2,8 @@ package aibook.infra;
 
 import aibook.config.kafka.KafkaProcessor;
 import aibook.domain.*;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.StreamListener;
@@ -13,36 +13,28 @@ import org.springframework.stereotype.Service;
 @Service
 public class ReadingPageViewHandler {
 
+    //<<< DDD / CQRS
     @Autowired
     private ReadingPageRepository readingPageRepository;
 
     @StreamListener(KafkaProcessor.INPUT)
-    public void whenEventReceived(@Payload String messageJson) {
+    public void whenReadingApplied_then_CREATE_1(
+        @Payload ReadingApplied readingApplied
+    ) {
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode jsonNode = objectMapper.readTree(messageJson);
+            if (!readingApplied.validate()) return;
 
-            String eventType = jsonNode.get("type").asText();
-
-            if ("ReadingApplied".equals(eventType)) {
-                ReadingApplied readingApplied = objectMapper.treeToValue(jsonNode, ReadingApplied.class);
-
-                if (!readingApplied.validate()) return;
-
-                ReadingPage readingPage = new ReadingPage();
-                readingPage.setId(readingApplied.getId());
-                readingPage.setUserId(readingApplied.getUserId().intValue());
-                readingPage.setBookId(readingApplied.getBookId().intValue());
-                readingPage.setStartReading(readingApplied.getStartReading());
-                readingPage.setWebUrl(readingApplied.getWebUrl());
-
-                readingPageRepository.save(readingPage);
-
-                System.out.println("📩 ReadingApplied 이벤트 수신 및 저장 완료: " + readingApplied);
-            }
-
+            // view 객체 생성
+            ReadingPage readingPage = new ReadingPage();
+            // view 객체에 이벤트의 Value 를 set 함
+            readingPage.setId(readingApplied.getId());
+            readingPage.setUserId(readingApplied.getUserId().intValue());
+            readingPage.setBookId(readingApplied.getBookId().intValue());
+            readingPage.setStartReading(readingApplied.getStartReading());
+            readingPage.setWebUrl(readingApplied.getWebUrl());
+            // view 레파지 토리에 save
+            readingPageRepository.save(readingPage);
         } catch (Exception e) {
-            System.err.println("❌ 이벤트 처리 중 예외 발생:");
             e.printStackTrace();
         }
     }
@@ -53,6 +45,7 @@ public class ReadingPageViewHandler {
     ) {
         try {
             if (!readingCanceled.validate()) return;
+            // view 레파지 토리에 삭제 쿼리
             readingPageRepository.deleteById(readingCanceled.getId());
         } catch (Exception e) {
             e.printStackTrace();
@@ -65,9 +58,11 @@ public class ReadingPageViewHandler {
     ) {
         try {
             if (!readingFailed.validate()) return;
+            // view 레파지 토리에 삭제 쿼리
             readingPageRepository.deleteById(readingFailed.getId());
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+    //>>> DDD / CQRS
 }

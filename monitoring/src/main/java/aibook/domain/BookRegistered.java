@@ -20,7 +20,7 @@ public class BookRegistered extends AbstractEvent {
     private Integer view;
     private Date date;
 
-    public boolean validate() {
-        return this.id != null;
-    }
+    // public boolean validate() {
+    //     return this.id != null;
+    // }
 }
