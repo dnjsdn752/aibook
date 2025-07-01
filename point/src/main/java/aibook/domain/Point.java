@@ -53,36 +53,41 @@ public class Point {
 
     }
 
-    //>>> Clean Arch / Port Method
-    //<<< Clean Arch / Port Method
     public static Point decreasePoint(ReadingApplied readingApplied) {
         return repository().findByUserId(readingApplied.getUserId())
             .map(point -> {
-                int usedPoint = readingApplied.getUsedPoint();
-                if (point.getPoint() >= usedPoint) {
+                int usedPoint = 500;
+                if(point.getIsSubscribe()){
+                    PointDecreased pointDecreased = new PointDecreased(point);
+                    pointDecreased.setBookId(readingApplied.getBookId());
+                    pointDecreased.publishAfterCommit();
+                    return point;
+                }else{
+                    if (point.getPoint() >= usedPoint) {
                         point.setPoint(point.getPoint() - readingApplied.getUsedPoint());
                         point.setReadingId(readingApplied.getReadingId());
                         repository().save(point);
 
                         PointDecreased pointDecreased = new PointDecreased(point);
+                        pointDecreased.setBookId(readingApplied.getBookId());
                         pointDecreased.publishAfterCommit();
 
                         return point;
-                } else {
-                    OutOfPoint outOfPoint = new OutOfPoint(point);
-                    outOfPoint.publishAfterCommit();
-                    return point;
-                }
+                    } else {
+                        OutOfPoint outOfPoint = new OutOfPoint(point);
+                        outOfPoint.publishAfterCommit();
+                        return point;
+                    }
+                }   
             })
             .orElse(null);
     }
 
-    //>>> Clean Arch / Port Method
-    //<<< Clean Arch / Port Method
+
     public static Point increasePoint(ReadingCanceled readingCanceled) {
         return repository().findByUserId(readingCanceled.getUserId())
             .map(point -> {
-                int refundPoint = readingCanceled.getRefundPoint();
+                int refundPoint = 500;
                 point.setPoint(point.getPoint() + refundPoint);
                 repository().save(point);
                 return point;
@@ -116,9 +121,20 @@ public class Point {
 
                 return point;
             });
+    }
+    public static Point update_Subscrib(UpdateSubscription updateSubscription){
+        return repository().findByUserId(updateSubscription.getId())
+            .map(point -> {
+                point.setIsSubscribe(updateSubscription.getIsSubscription());
+                SubscriptionUpdate event = new SubscriptionUpdate(point);
+                event.publishAfterCommit();
+
+                return point;
+            })
+            .orElse(null);
+    }
 }
 
 
 
-}
 //>>> DDD / Aggregate Root

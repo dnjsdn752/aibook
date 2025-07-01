@@ -9,19 +9,22 @@ import lombok.*;
 //<<< DDD / Domain Event
 @Data
 @ToString
-public class PointDecreased extends AbstractEvent {
+public class PointBought extends AbstractEvent {
 
     private Long id;
     private Integer point;
-    private Long bookId;
     private Long userId;
 
-    public PointDecreased(Point aggregate) {
-        super(aggregate);
+    // public PointBought(Point aggregate) {
+    //     super(aggregate);
+    // }
+
+    public PointBought() {
+        super();
     }
 
-    public PointDecreased() {
-        super();
+    public boolean validate() {
+        return this.id != null;
     }
 }
 //>>> DDD / Domain Event

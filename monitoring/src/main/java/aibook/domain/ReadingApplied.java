@@ -9,9 +9,9 @@ import lombok.Data;
 public class ReadingApplied extends AbstractEvent {
 
     private Long id;
-    private UserId userId;
-    private BookId bookId;
+    private Long userId;
+    private Long bookId;
     private Boolean isReading;
     private Date startReading;
-    private String webURL;
+    private String WebUrl;
 }
