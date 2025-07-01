@@ -22,10 +22,11 @@ export const editManuscript = async (id: number, data: {
     return await api.put(`/manuscripts/${id}/editmanuscript`, data);
 };
 
-// AI 요청
+// AI 생성 요청 (LLM 기반)
 export const requestAi = async (id: number) => {
     return await api.put(`/manuscripts/${id}/requestai`);
 };
+
 
 // 출간 요청
 export const requestPublishing = async (id: number) => {

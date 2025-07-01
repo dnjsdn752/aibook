@@ -1,4 +1,3 @@
-// src/features/Manuscript/ManuscriptEditor.tsx
 import React, { useState } from 'react';
 import {
     TextField,
@@ -7,7 +6,6 @@ import {
     Typography,
     Container,
 } from '@mui/material';
-
 import {
     registerManuscript,
     editManuscript,
@@ -15,23 +13,33 @@ import {
     requestAi,
 } from '../../api/manuscript';
 
+import { useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
+
 const ManuscriptEditor: React.FC = () => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [manuscriptId, setManuscriptId] = useState<number | null>(null);
 
-    // 임시 저장 → 저장 (신규 등록)
+    const queryClient = useQueryClient();
+    const navigate = useNavigate();
+
+    // AI 생성 결과 저장
+    const [aiSummary, setAiSummary] = useState<string | null>(null);
+    const [aiImage, setAiImage] = useState<string | null>(null);
+
+    // 저장 (신규 등록)
     const handleTempSave = async () => {
         try {
             const response = await registerManuscript({ title, content });
             setManuscriptId(response.data.id);
-            console.log('💾 저장(신규 등록) 성공:', response.data);
+            console.log('💾 저장 성공:', response.data);
         } catch (error) {
-            console.error('저장(신규 등록) 실패:', error);
+            console.error('저장 실패:', error);
         }
     };
 
-    // 저장 → 수정
+    // 수정
     const handleSave = async () => {
         if (!manuscriptId) {
             alert('먼저 저장 버튼을 눌러 원고를 등록해주세요.');
@@ -45,6 +53,27 @@ const ManuscriptEditor: React.FC = () => {
         }
     };
 
+    // AI 생성: 표지 + 요약
+    const handleAiGenerate = async () => {
+        if (!manuscriptId) {
+            alert("먼저 원고를 저장해주세요.");
+            return;
+        }
+
+        try {
+            const res = await requestAi(manuscriptId);
+            console.log("📄 AI 생성 성공:", res.data);
+
+            // AI 결과 UI에 반영
+            setAiSummary(res.data.aiSummary);
+            setAiImage(res.data.aiImage);
+        } catch (error) {
+            console.error("AI 생성 요청 실패:", error);
+            alert("AI 생성 요청 중 오류가 발생했습니다.");
+        }
+    };
+
+    // 출간 요청
     const handlePublishRequest = async () => {
         if (!manuscriptId) {
             alert('먼저 원고를 저장해야 출간 요청이 가능합니다.');
@@ -53,25 +82,14 @@ const ManuscriptEditor: React.FC = () => {
         try {
             const response = await requestPublishing(manuscriptId);
             console.log('📢 출간 요청 성공:', response.data);
+
+            // ✅ 출간 요청 성공 후: 메인 페이지에서 목록 자동 갱신되게
+            queryClient.invalidateQueries({ queryKey: ['books'] });
+
+            alert('출간 요청이 완료되었습니다.');
+            navigate('/'); // 메인 페이지로 이동
         } catch (error) {
             console.error('출간 요청 실패:', error);
-        }
-    };
-
-    const handleGenerateCover = () => {
-        console.log('🎨 표지 생성 (추후 API 연결 필요)');
-    };
-
-    const handleSummarize = async () => {
-        if (!manuscriptId) {
-            alert('먼저 원고를 저장해야 AI 요약 요청이 가능합니다.');
-            return;
-        }
-        try {
-            const response = await requestAi(manuscriptId);
-            console.log('📄 요약 요청 성공:', response.data);
-        } catch (error) {
-            console.error('요약 요청 실패:', error);
         }
     };
 
@@ -97,11 +115,8 @@ const ManuscriptEditor: React.FC = () => {
                 />
 
                 <Stack direction="row" spacing={2} justifyContent="flex-end">
-                    <Button variant="outlined" onClick={handleGenerateCover}>
-                        표지 생성
-                    </Button>
-                    <Button variant="outlined" onClick={handleSummarize}>
-                        요약
+                    <Button variant="outlined" onClick={handleAiGenerate}>
+                        AI 생성
                     </Button>
                     <Button variant="contained" onClick={handleTempSave}>
                         저장
