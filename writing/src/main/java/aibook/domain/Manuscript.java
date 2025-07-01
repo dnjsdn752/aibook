@@ -19,7 +19,8 @@ public class Manuscript {
     private Long authorId;
 
     private String title;
-
+    
+    @Column(length = 1000)
     private String content;
 
     private Boolean status;
@@ -28,8 +29,10 @@ public class Manuscript {
 
     private Date date;
 
+    @Column(length = 1000)
     private String aiImage;
 
+    @Column(length = 1000)
     private String aiSummary;
 
     // @PostPersist

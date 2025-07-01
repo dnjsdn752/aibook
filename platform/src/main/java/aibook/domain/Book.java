@@ -35,7 +35,8 @@ public class Book {
     private String aiImage;
 
     private String aiSummary;
-
+    
+    @Column(length = 1000)
     private String content;
 
     private Integer view;
