@@ -19,5 +19,5 @@ public class ReadingPage {
     private Integer userId;
     private Integer bookId;
     private Date startReading;
-    private String webUrl;
+    private String WebUrl;
 }

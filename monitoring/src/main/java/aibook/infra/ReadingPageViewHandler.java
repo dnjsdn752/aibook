@@ -28,8 +28,8 @@ public class ReadingPageViewHandler {
             ReadingPage readingPage = new ReadingPage();
             // view 객체에 이벤트의 Value 를 set 함
             readingPage.setId(readingApplied.getId());
-            readingPage.setUserId(Integer.valueOf(readingApplied.getUserId()));
-            readingPage.setBookId(Integer.valueOf(readingApplied.getBookId()));
+            readingPage.setUserId(readingApplied.getUserId().intValue());
+            readingPage.setBookId(readingApplied.getBookId().intValue());
             readingPage.setStartReading(readingApplied.getStartReading());
             readingPage.setWebUrl(readingApplied.getWebUrl());
             // view 레파지 토리에 save
