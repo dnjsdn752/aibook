@@ -13,5 +13,4 @@ public class UserRegistered extends AbstractEvent {
     private String email;
     private String userName;
     private String password;
-
 }
