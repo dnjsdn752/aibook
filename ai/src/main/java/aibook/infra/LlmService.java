@@ -2,8 +2,7 @@ package aibook.infra;
 
 import aibook.domain.Ai;
 import aibook.domain.AiRequested;
-
-//import aibook.infra.dto.OpenAiResponse;
+import aibook.domain.OpenAiResponse;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -18,47 +17,89 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class LlmService {
 
-    @Value("${llm.api.url}")
-    private String llmApiUrl;
+    @Value("${llm.api.url.chat}")
+    private String chatApiUrl;
+
+    @Value("${llm.api.url.image}") // ✅ 공식 DALL·E 3 이미지 생성용 API
+    private String imageApiUrl;
 
     @Value("${llm.api.key}")
-    private String llmApiKey;
+    private String apiKey;
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public void callLlmAndSave(AiRequested request) {
-        WebClient.create()
-            .post()
-            .uri(llmApiUrl)
-            .header("Authorization", "Bearer " + llmApiKey)
-            .bodyValue(Map.of(
-                "model", "gpt-3.5-turbo",
-                "messages", List.of(
-                    Map.of("role", "system", "content",
-                        "너는 책 내용을 요약하고 표지 이미지 URL도 생성하는 AI야. 다음 요청에 대해 JSON 형식으로 응답해. 예: {\"summary\": \"...\", \"image_url\": \"...\"}"),
-                    Map.of("role", "user", "content",
-                        String.format("책 제목: %s\n작가: %s\n내용: %s",
-                            request.getTitle(), request.getAuthorName(), request.getContent())
+        try {
+            System.out.println("🟡 [AI 처리 시작] manuscriptId=" + request.getId() + ", title=" + request.getTitle());
+
+            // ✅ 1. 요약 생성
+            System.out.println("📄 [요약 생성 요청 시작]");
+            OpenAiResponse chatResponse = WebClient.create()
+                .post()
+                .uri(chatApiUrl)
+                .header("Authorization", "Bearer " + apiKey)
+                .bodyValue(Map.of(
+                    "model", "gpt-4",
+                    "messages", List.of(
+                        Map.of("role", "system", "content",
+                            "너는 책 내용을 분석해서 aiSummary를 작성하는 AI야. 아래 JSON 형식으로만 응답해.\n\n" +
+                            "{ \"aiSummary\": \"...\" }"),
+                        Map.of("role", "user", "content",
+                            String.format("책 제목: %s\n작가: %s\n내용: %s",
+                                request.getTitle(), request.getAuthorName(), request.getContent())
+                        )
                     )
-                )
-            ))
-            .retrieve()
-            .bodyToMono(aibook.domain.OpenAiResponse.class)
-            .subscribe(response -> {
-                try {
-                    String content = response.getChoices().get(0).getMessage().getContent();
+                ))
+                .retrieve()
+                .bodyToMono(OpenAiResponse.class)
+                .block();
 
-                    ObjectMapper mapper = new ObjectMapper();
-                    Map<String, String> parsed = mapper.readValue(content, new TypeReference<>() {});
-                    String summary = parsed.get("summary");
-                    String imageUrl = parsed.get("image_url");
+            String content = chatResponse.getChoices().get(0).getMessage().getContent();
+            Map<String, String> parsed = objectMapper.readValue(content, new TypeReference<>() {});
+            request.setAiSummary(parsed.get("aiSummary"));
+            System.out.println("✅ [요약 생성 완료]");
 
-                    request.setAiSummary(summary);
-                    request.setAiImage(imageUrl);
+            // ✅ 2. 이미지 생성 (공식 DALL·E 3 API 사용)
+            System.out.println("🖼️ [DALL·E 3 이미지 생성 요청 시작 - 공식 API]");
 
-                    Ai.aiGenerate(request); // 저장 + 이벤트 발행
+            String prompt = String.format(
+                "Create a highly detailed and visually rich book cover illustration based on the following title and content. " +
+                "Ensure that the artwork clearly reflects the themes and mood of the story. " +
+                "Do not include any text, lettering or titles on the image.\n\n" +
+                "Title: \"%s\"\nContent: \"%s\"",
+                request.getTitle(), request.getAiSummary()
+            );
 
-                } catch (Exception e) {
-                    e.printStackTrace(); // 예외 로그 출력
-                }
-            });
+            Map<String, Object> imageRequestBody = Map.of(
+                "model", "dall-e-3", // ✅ 핵심: 공식 DALL·E 3 모델
+                "prompt", prompt,
+                "n", 1,
+                "size", "1024x1024"
+            );
+
+            Map imageResponse = WebClient.create()
+                .post()
+                .uri(imageApiUrl) // ex: https://api.openai.com/v1/images/generations
+                .header("Authorization", "Bearer " + apiKey)
+                .bodyValue(imageRequestBody)
+                .retrieve()
+                .bodyToMono(Map.class)
+                .block();
+
+            List<Map<String, String>> data = (List<Map<String, String>>) imageResponse.get("data");
+            String imageUrl = data.get(0).get("url");
+            request.setAiImage(imageUrl);
+
+            System.out.println("✅ [이미지 생성 완료] imageUrl=" + imageUrl);
+
+            // ✅ 3. DB 저장 + Kafka 이벤트 발행
+            System.out.println("📦 [DB 저장 + Kafka 이벤트 발행]");
+            Ai.aiGenerate(request);
+            System.out.println("✅ [AI 처리 전체 완료]");
+
+        } catch (Exception e) {
+            System.out.println("[ERROR] LlmService 실패 : " +  e.getMessage());
+            e.printStackTrace();
+        }
     }
 }

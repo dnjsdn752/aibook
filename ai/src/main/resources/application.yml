@@ -3,7 +3,9 @@ server:
 
 llm:
   api:
-    url: https://api.openai.com/v1/chat/completions
+    url:  
+      chat: https://api.openai.com/v1/chat/completions
+      image: https://api.openai.com/v1/images/generations
     key: # api키 연결하는 부분
 spring:
   application:
