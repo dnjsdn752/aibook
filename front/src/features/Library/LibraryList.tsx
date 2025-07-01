@@ -1,13 +1,15 @@
+// src/features/Library/LibraryList.tsx
+
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { fetchBooks } from "../../api/library";
+import { getBooks } from "../../api/library";
 
 export const LibraryList: React.FC = () => {
   const [search, setSearch] = useState("");
 
   const { data = [], isLoading, error } = useQuery({
-    queryKey: ["books"],
-    queryFn: () => fetchBooks(search),
+    queryKey: ["books", search],
+    queryFn: () => getBooks(search),
   });
 
   if (isLoading) return <p>로딩 중...</p>;
@@ -20,7 +22,11 @@ export const LibraryList: React.FC = () => {
         placeholder="책 제목 검색"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        style={{ padding: "0.5rem", marginBottom: "1rem", width: "100%" }}
+        style={{
+          padding: "0.5rem",
+          marginBottom: "1rem",
+          width: "100%",
+        }}
       />
       <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
         {data
@@ -29,7 +35,7 @@ export const LibraryList: React.FC = () => {
           )
           .map((book: any) => (
             <div
-              key={book.id}
+              key={book._links.self.href}
               style={{
                 border: "1px solid #ddd",
                 padding: "1rem",
@@ -37,11 +43,16 @@ export const LibraryList: React.FC = () => {
               }}
             >
               <img
-                src={book.coverUrl}
+                src={
+                  book.aiImage || "https://via.placeholder.com/150?text=No+Image"
+                }
                 alt={book.title}
                 style={{ width: "100%", height: "auto" }}
               />
               <h3>{book.title}</h3>
+              <p style={{ fontSize: "0.9rem", color: "#555" }}>
+                {book.authorName}
+              </p>
             </div>
           ))}
       </div>
