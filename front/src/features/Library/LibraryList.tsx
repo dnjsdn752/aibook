@@ -35,59 +35,9 @@ export const LibraryList: React.FC = () => {
           margin: "0 auto",
         }}
       >
-        {/* 상단 네비게이션 */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: "2rem",
-            padding: "1rem",
-            borderRadius: "8px",
-            background: "#fff",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-          }}
-        >
-          <h1
-            style={{
-              margin: 0,
-              fontSize: "1.5rem",
-              color: "#333",
-            }}
-          >
-            도서관리 시스템
-          </h1>
-          <button
-            style={{
-              backgroundColor: "#4a90e2",
-              color: "#fff",
-              border: "none",
-              borderRadius: "6px",
-              padding: "0.5rem 1rem",
-              fontSize: "1rem",
-              cursor: "pointer",
-              transition: "background-color 0.2s ease",
-            }}
-            onClick={() => {
-              // 마이페이지 라우팅
-              window.location.href = "/mypage";
-            }}
-            onMouseEnter={(e) =>
-              ((e.currentTarget as HTMLButtonElement).style.backgroundColor =
-                "#357ABD")
-            }
-            onMouseLeave={(e) =>
-              ((e.currentTarget as HTMLButtonElement).style.backgroundColor =
-                "#4a90e2")
-            }
-          >
-            마이페이지
-          </button>
-        </div>
-
         {/* 검색창 */}
         <div
-        style={{
+          style={{
             marginBottom: "2rem",
             background: "rgba(255, 255, 255, 0.7)",
             backdropFilter: "blur(10px)",
@@ -95,25 +45,25 @@ export const LibraryList: React.FC = () => {
             padding: "1rem",
             boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
             display: "flex",
-            justifyContent: "center",  // 중앙정렬
-        }}
+            justifyContent: "center",
+          }}
         >
-        <input
+          <input
             type="text"
             placeholder="책 제목 또는 작가 검색"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             style={{
-            padding: "0.75rem 1rem",
-            width: "100%",
-            maxWidth: "1000px",      // 폭 제한
-            borderRadius: "8px",
-            border: "1px solid #ccc",
-            fontSize: "1rem",
-            background: "#fff",
-            boxShadow: "inset 0 1px 3px rgba(0,0,0,0.1)",
+              padding: "0.75rem 1rem",
+              width: "100%",
+              maxWidth: "1000px",
+              borderRadius: "8px",
+              border: "1px solid #ccc",
+              fontSize: "1rem",
+              background: "#fff",
+              boxShadow: "inset 0 1px 3px rgba(0,0,0,0.1)",
             }}
-        />
+          />
         </div>
 
         {/* 카드 리스트 */}
