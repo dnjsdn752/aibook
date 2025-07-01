@@ -22,7 +22,8 @@ public class Ai {
     private Long id;
 
     private Long manuscriptId;
-
+    
+    @Column(length = 1000)
     private String aiImage;
 
     private String aiSummary;
@@ -51,6 +52,7 @@ public class Ai {
         ai.setContent(aiRequest.getContent());
 
         repository().save(ai);
+        //System.out.println("저장된 ai ID" + save.getId());
 
         AiGenerated aiGenerated = new AiGenerated(ai);
         aiGenerated.publish(); // <=== 여기 바꾸기
