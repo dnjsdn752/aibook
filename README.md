@@ -67,6 +67,11 @@ AI요청 - http PUT :8084/manuscripts/1/requestai
 ```
 - monitoring
 ```
+구독자 - http :8080/userpages | http :8080/userpages/{id}
+포인트 - http :8080/points | http :8080/points/{id}
+도서 - http :8080/bookpages | http :8080/bookpages/{id}
+원고 - http :8080/manuscriptpages | http :8080/manuscriptpages/{id}
+대여 - http :8080/readingpages | http :8080/readingpages/{id}
 ```
 
 
