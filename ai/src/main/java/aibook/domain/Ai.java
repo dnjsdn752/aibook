@@ -26,6 +26,7 @@ public class Ai {
     @Column(length = 1000)
     private String aiImage;
 
+    @Column(length = 1000)
     private String aiSummary;
 
     private String title;

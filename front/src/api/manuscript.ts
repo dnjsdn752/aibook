@@ -3,7 +3,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://8088-dnjsdn752-aibook-n7lzoljuat8.ws-us120.gitpod.io", // Gateway 주소!
+  baseURL: "https://urban-chainsaw-69w4r7xj6ggv2r4xr-8088.app.github.dev/", // Gateway 주소!
 });
 
 // 원고 등록
