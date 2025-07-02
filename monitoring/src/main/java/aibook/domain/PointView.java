@@ -10,7 +10,7 @@ public class PointView {
 
     @Id
     private Long id;
-
-    private Integer point;
+    private int point;
     private Long userId;
+    private Boolean isSubscription;
 }

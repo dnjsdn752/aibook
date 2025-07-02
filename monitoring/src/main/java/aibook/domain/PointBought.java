@@ -12,12 +12,10 @@ import lombok.*;
 public class PointBought extends AbstractEvent {
 
     private Long id;
-    private Integer point;
+    private Integer totalPoint;
     private Long userId;
+    private Integer boughtAmount;
 
-    // public PointBought(Point aggregate) {
-    //     super(aggregate);
-    // }
 
     public PointBought() {
         super();

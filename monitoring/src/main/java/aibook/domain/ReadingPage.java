@@ -6,18 +6,17 @@ import java.util.List;
 import javax.persistence.*;
 import lombok.Data;
 
-//<<< EDA / CQRS
 @Entity
 @Table(name = "ReadingPage_table")
 @Data
 public class ReadingPage {
 
     @Id
-    //@GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
 
-    private Integer userId;
-    private Integer bookId;
+    private Long userId;
+    private Long bookId;
+    private Boolean isReading;
     private Date startReading;
-    private String WebUrl;
+    private String webUrl;
 }
