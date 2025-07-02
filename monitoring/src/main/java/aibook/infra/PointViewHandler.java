@@ -32,7 +32,6 @@ public class PointViewHandler {
     public void whenPointBought_then_UPDATE_1(
         @Payload PointBought event
     ) {
-        
         if (!event.validate()) return;
         
         Optional<PointView> viewOptional = pointViewRepository.findById(
@@ -40,7 +39,7 @@ public class PointViewHandler {
         );
         if (viewOptional.isPresent()) {
             PointView view = viewOptional.get();
-            view.setPoint(view.getPoint() + event.getBoughtAmount());
+            view.setPoint(event.getTotalPoint());
             pointViewRepository.save(view);
         }
     }
