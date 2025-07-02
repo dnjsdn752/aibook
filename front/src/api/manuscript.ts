@@ -37,3 +37,15 @@ export const requestPublishing = async (id: number) => {
 export const getManuscript = async (id: number) => {
     return await api.get(`/manuscripts/${id}`);
 };
+
+
+// 해당 작가의 출간되지 않은 원고 목록
+export const getMyManuscripts = async (authorId: number) => {
+    const response = await axios.get(`/manuscripts/author/${authorId}`, {
+        params: {
+        authorId,
+        status: false,  // 미출간 상태만 가져오는 필터
+        },
+    });
+    return response.data;  // 서버에서 배열(JSON 리스트) 반환한다고 가정
+};

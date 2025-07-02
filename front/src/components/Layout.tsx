@@ -36,7 +36,7 @@ export const Layout: React.FC<LayoutProps> = ({ isAuthor }) => (
       </Link>
       <div style={{ display: "flex", gap: "0.5rem" }}>
         {isAuthor && (
-          <Link to="/manuscripts/new">
+          <Link to="/manuscripts">
             <button
               style={{
                 backgroundColor: "#4a90e2",
@@ -48,7 +48,7 @@ export const Layout: React.FC<LayoutProps> = ({ isAuthor }) => (
                 cursor: "pointer",
               }}
             >
-              도서 등록
+              집필
             </button>
           </Link>
         )}

@@ -8,6 +8,8 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 //<<< Clean Arch / Inbound Adaptor
 
 @RestController
@@ -95,6 +97,11 @@ public class ManuscriptController {
 
         manuscriptRepository.save(manuscript);
         return manuscript;
+    }
+
+    @GetMapping(value = "/manuscripts", produces = "application/json;charset=UTF-8")
+    public List<Manuscript> getMyManuscripts(@RequestParam Long authorId) {
+        return manuscriptRepository.findByAuthorIdAndStatusFalse(authorId);
     }
 }
 //>>> Clean Arch / Inbound Adaptor

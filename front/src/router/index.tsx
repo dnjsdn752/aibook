@@ -4,6 +4,7 @@ import { createBrowserRouter } from "react-router-dom";
 import { Layout } from "../components/Layout";
 import { LibraryList } from "../features/Library/LibraryList";
 import ManuscriptEditor from "../features/Manuscript/ManuscriptEditor";
+import MyDraftList from "../features/Manuscript/MyDraftList";
 
 export const router = createBrowserRouter([
   {
@@ -24,8 +25,21 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "manuscripts/new",
-        element: <ManuscriptEditor />,
+        path: "manuscripts",
+        children: [
+          {
+            index: true,
+            element: <MyDraftList />,
+          },
+          {
+            path: "editor", // 새 원고 작성
+            element: <ManuscriptEditor />,
+          },
+          {
+            path: ":id", // 기존 원고 수정
+            element: <ManuscriptEditor />,
+          },
+        ],
       },
     ],
   },
