@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 //<<< Clean Arch / Inbound Adaptor
 
+// UserController.java
+
 @RestController
 @Transactional
 public class UserController {
@@ -17,6 +19,7 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
 
+    // 구독 구매
     @RequestMapping(
         value = "/users/{id}/buysubscription",
         method = RequestMethod.PUT,
@@ -28,15 +31,29 @@ public class UserController {
         HttpServletRequest request,
         HttpServletResponse response
     ) throws Exception {
-        System.out.println("##### /user/buySubscription  called #####");
+        System.out.println("##### /user/buySubscription called #####");
         Optional<User> optionalUser = userRepository.findById(id);
-
         optionalUser.orElseThrow(() -> new Exception("No Entity Found"));
         User user = optionalUser.get();
         user.buySubscription(buySubscriptionCommand);
-
         userRepository.save(user);
         return user;
     }
+
+    // 🔵 로그인
+    @PostMapping("/users/login")
+    public LoginResponse login(@RequestBody LoginRequest loginRequest) throws Exception {
+        User user = userRepository.findByEmail(loginRequest.getEmail());
+        if (user == null) {
+            throw new Exception("존재하지 않는 이메일입니다.");
+        }
+
+        if (!user.getPassword().equals(loginRequest.getPassword())) {
+            throw new Exception("비밀번호가 일치하지 않습니다.");
+        }
+
+        // 로그인 성공
+        return new LoginResponse(user.getId(), user.getUserName(), "로그인 성공");
+    }
 }
-//>>> Clean Arch / Inbound Adaptor
+
