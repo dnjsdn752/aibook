@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Snackbar, Alert } from '@mui/material';
-import { buySubscription } from '../../api/user'; 
+import { buySubscription } from '../../api/user_buy'; 
 
 interface Props {
   userId: number; // 마이페이지에서 로그인된 사용자 ID 전달

@@ -15,14 +15,3 @@ export const signupUser = async (payload: SignupFormData) => {
   return axios.post('localhost:5173/signup', payload)
 }
 
-
-// BuySubscriptionCommand 인터페이스 정의
-export interface BuySubscriptionCommand {
-  isSubscription: boolean;
-}
-
-// 사용자 구독 구매 API 요청
-export const buySubscription = async (userId: number, payload: BuySubscriptionCommand) => {
-  return await api.put(`/users/${userId}/buysubscription`, payload);
-};
-
