@@ -13,4 +13,5 @@ public class PointView {
 
     private Integer point;
     private Long userId;
+    private Boolean isSubscription;
 }

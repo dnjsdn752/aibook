@@ -28,8 +28,9 @@ public class ReadingPageViewHandler {
             ReadingPage readingPage = new ReadingPage();
             // view 객체에 이벤트의 Value 를 set 함
             readingPage.setId(readingApplied.getId());
-            readingPage.setUserId(readingApplied.getUserId().intValue());
-            readingPage.setBookId(readingApplied.getBookId().intValue());
+            readingPage.setUserId(readingApplied.getUserId());
+            readingPage.setBookId(readingApplied.getBookId());
+            readingPage.setIsReading(readingApplied.getIsReading());
             readingPage.setStartReading(readingApplied.getStartReading());
             readingPage.setWebUrl(readingApplied.getWebUrl());
             // view 레파지 토리에 save
@@ -58,7 +59,6 @@ public class ReadingPageViewHandler {
     ) {
         try {
             if (!readingFailed.validate()) return;
-            // view 레파지 토리에 삭제 쿼리
             readingPageRepository.deleteById(readingFailed.getId());
         } catch (Exception e) {
             e.printStackTrace();

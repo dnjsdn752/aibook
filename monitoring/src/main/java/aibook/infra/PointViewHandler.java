@@ -24,7 +24,7 @@ public class PointViewHandler {
         view.setId(event.getId());
         view.setUserId(event.getUserId()); // Long 타입이라고 가정
         view.setPoint(event.getPoint());
-
+        view.setIsSubscription(event.getIsSubscribe());
         pointViewRepository.save(view);
     }
 
@@ -36,7 +36,7 @@ public class PointViewHandler {
 
         PointView view = pointViewRepository.findByUserId(event.getUserId());
         if (view != null) {
-            view.setPoint(view.getPoint() + event.getPoint());
+            view.setPoint(view.getPoint() + event.getBoughtAmount());
             pointViewRepository.save(view);
         }
     }
@@ -49,7 +49,20 @@ public class PointViewHandler {
 
         PointView view = pointViewRepository.findByUserId(event.getUserId());
         if (view != null) {
-            view.setPoint(view.getPoint() - event.getPoint());
+            view.setPoint(event.getPoint());
+            pointViewRepository.save(view);
+        }
+    }
+
+    @StreamListener(KafkaProcessor.INPUT)
+    public void whenSubscriptionUpdate_then_UPDATE(
+        @Payload SubscriptionUpdate event
+    ) {
+        if (!event.validate()) return;
+
+        PointView view = pointViewRepository.findByUserId(event.getUserId());
+        if (view != null) {
+            view.setIsSubscription(event.getIsSubscribe);
             pointViewRepository.save(view);
         }
     }

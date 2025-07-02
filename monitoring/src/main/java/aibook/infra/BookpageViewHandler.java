@@ -41,20 +41,20 @@ public class BookpageViewHandler {
     }
 
     @StreamListener(KafkaProcessor.INPUT)
-    public void whenBookRegistered_then_UPDATE_1(
-        @Payload BookRegistered bookRegistered
+    public void whenBadgeGranted_then_UPDATE_1(
+        @Payload BadgeGranted badgeGranted
     ) {
         try {
-            if (!bookRegistered.validate()) return;
+            if (!badgeGranted.validate()) return;
             // view 객체 조회
             Optional<Bookpage> bookpageOptional = bookpageRepository.findById(
-                bookRegistered.getId()
+                badgeGranted.getId()
             );
 
             if (bookpageOptional.isPresent()) {
                 Bookpage bookpage = bookpageOptional.get();
-                // view 객체에 이벤트의 eventDirectValue 를 set 함
-                // view 레파지 토리에 save
+                bookpage.setView(badgeGranted.getView());
+                bookpage.setIsBestseller(badgeGranted.getIsBestSeller());
                 bookpageRepository.save(bookpage);
             }
         } catch (Exception e) {
