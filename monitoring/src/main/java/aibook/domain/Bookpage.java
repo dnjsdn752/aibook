@@ -13,12 +13,18 @@ import lombok.Data;
 public class Bookpage {
 
     @Id
-    //@GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
-
+    private Long authorId;
+    private String title;
+    private String category;
+    private Boolean isBestSeller;
     private String authorName;
-    private String bookName;
-    private Integer view;
+    @Column(length = 1000)
     private String aiImage;
-    private String isBestseller;
+    @Column(length = 1000)
+    private String aiSummary;
+    @Column(length = 1000)
+    private String content;
+    private Integer view;
+    private Date date;
 }

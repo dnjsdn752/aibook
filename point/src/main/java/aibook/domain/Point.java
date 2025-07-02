@@ -87,7 +87,7 @@ public class Point {
     public static Point increasePoint(ReadingCanceled readingCanceled) {
         return repository().findByUserId(readingCanceled.getUserId())
             .map(point -> {
-                int refundPoint = readingCanceled.getRefundPoint()
+                int refundPoint = readingCanceled.getRefundPoint();
                 point.setPoint(point.getPoint() + refundPoint);
                 repository().save(point);
                 return point;

@@ -22,48 +22,75 @@ public class PointViewHandler {
 
         PointView view = new PointView();
         view.setId(event.getId());
-        view.setUserId(event.getUserId()); // Long 타입이라고 가정
+        view.setUserId(event.getUserId()); 
         view.setPoint(event.getPoint());
         view.setIsSubscription(event.getIsSubscribe());
         pointViewRepository.save(view);
     }
 
     @StreamListener(KafkaProcessor.INPUT)
-    public void whenPointBought_then_UPDATE(
+    public void whenPointBought_then_UPDATE_1(
         @Payload PointBought event
     ) {
+        
         if (!event.validate()) return;
-
-        PointView view = pointViewRepository.findByUserId(event.getUserId());
-        if (view != null) {
+        
+        Optional<PointView> viewOptional = pointViewRepository.findById(
+                event.getId()
+        );
+        if (viewOptional.isPresent()) {
+            PointView view = viewOptional.get();
             view.setPoint(view.getPoint() + event.getBoughtAmount());
             pointViewRepository.save(view);
         }
     }
 
     @StreamListener(KafkaProcessor.INPUT)
-    public void whenPointDecreased_then_UPDATE(
+    public void whenPointDecreased_then_UPDATE_2(
         @Payload PointDecreased event
     ) {
         if (!event.validate()) return;
 
-        PointView view = pointViewRepository.findByUserId(event.getUserId());
-        if (view != null) {
+        Optional<PointView> viewOptional = pointViewRepository.findById(
+                event.getId()
+        );
+        if (viewOptional.isPresent()) {
+            PointView view = viewOptional.get();
             view.setPoint(event.getPoint());
             pointViewRepository.save(view);
         }
     }
 
     @StreamListener(KafkaProcessor.INPUT)
-    public void whenSubscriptionUpdate_then_UPDATE(
+    public void whenReadingCanceled_then_UPDATE_3(
+        @Payload ReadingCanceled event
+    ) {
+        
+        if (!event.validate()) return;
+
+        Optional<PointView> viewOptional = pointViewRepository.findById(
+                event.getId()
+        );
+        if (viewOptional.isPresent()) {
+            PointView view = viewOptional.get();
+            view.setPoint(view.getPoint() + 500);
+            pointViewRepository.save(view);
+        }
+    }
+
+    @StreamListener(KafkaProcessor.INPUT)
+    public void whenSubscriptionUpdate_then_UPDATE_4(
         @Payload SubscriptionUpdate event
     ) {
         if (!event.validate()) return;
 
-        PointView view = pointViewRepository.findByUserId(event.getUserId());
-        if (view != null) {
-            view.setIsSubscription(event.getIsSubscribe);
-            pointViewRepository.save(view);
+        Optional<PointView> viewOptional = pointViewRepository.findById(
+                event.getId()
+        );
+        if (viewOptional.isPresent()) {
+            PointView view = viewOptional.get();
+            view.setIsSubscription(event.getIsSubscribe());
+        pointViewRepository.save(view);
         }
     }
 }

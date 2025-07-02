@@ -33,7 +33,7 @@ public class ManuscriptPageViewHandler {
             manuscriptPage.setAuthorName(manuscriptRegistered.getAuthorName());
             manuscriptPage.setStatus(false);
             // view 레파지 토리에 save
-            manuscriptPageRepository.save(bookpage);
+            manuscriptPageRepository.save(manuscriptPage);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -45,7 +45,7 @@ public class ManuscriptPageViewHandler {
         @Payload ManuscriptEdited manuscriptEdited
     ) {
         try {
-            if (!badgeGranted.validate()) return;
+            if (!manuscriptEdited.validate()) return;
             // view 객체 조회
             Optional<ManuscriptPage> manuscriptPageOptional = manuscriptPageRepository.findById(
                 manuscriptEdited.getId()
@@ -68,7 +68,7 @@ public class ManuscriptPageViewHandler {
         @Payload PublishingRequested publishingRequested
     ) {
         try {
-            if (!badgeGranted.validate()) return;
+            if (!publishingRequested.validate()) return;
             // view 객체 조회
             Optional<ManuscriptPage> manuscriptPageOptional = manuscriptPageRepository.findById(
                 publishingRequested.getId()

@@ -17,10 +17,6 @@ public class ManuscriptRegistered extends AbstractEvent {
     private Long authorId;
     private String authorName;
 
-    public ManuscriptRegistered(Manuscript aggregate) {
-        super(aggregate);
-    }
-
     public ManuscriptRegistered() {
         super();
     }

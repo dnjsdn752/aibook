@@ -20,9 +20,6 @@ public class PublishingRequested extends AbstractEvent {
     private String aiImage;
     private String aiSummary;
 
-    public PublishingRequested(Manuscript aggregate) {
-        super(aggregate);
-    }
 
     public PublishingRequested() {
         super();

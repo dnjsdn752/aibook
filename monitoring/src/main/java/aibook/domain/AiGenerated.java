@@ -19,16 +19,7 @@ public class AiGenerated extends AbstractEvent {
     private Long authorId;
     private String content;
 
-    public AiGenerated(Ai aggregate) {
-        super(aggregate);
-        this.id = aggregate.getId();
-        this.manuscriptId = aggregate.getManuscriptId();
-        this.aiImage = aggregate.getAiImage();
-        this.aiSummary = aggregate.getAiSummary();
-        this.title = aggregate.getTitle();
-        this.authorId = aggregate.getAuthorId();
-        this.content = aggregate.getContent();
-    }
+    
 
     public AiGenerated() {
         super();

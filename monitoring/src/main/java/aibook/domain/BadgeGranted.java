@@ -19,9 +19,6 @@ public class BadgeGranted extends AbstractEvent {
     private Integer view;
     private String title;
 
-    public BadgeGranted(Book aggregate) {
-        super(aggregate);
-    }
 
     public BadgeGranted() {
         super();
