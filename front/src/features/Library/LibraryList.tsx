@@ -29,12 +29,7 @@ export const LibraryList: React.FC = () => {
         boxSizing: "border-box",
       }}
     >
-      <div
-        style={{
-          maxWidth: "1200px",
-          margin: "0 auto",
-        }}
-      >
+      <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
         {/* 검색창 */}
         <div
           style={{
@@ -127,6 +122,24 @@ export const LibraryList: React.FC = () => {
                 >
                   {book.authorName}
                 </p>
+
+                {/* 🏆 베스트셀러 뱃지 */}
+                {book.isBestSeller == true && (
+                  <div
+                    style={{
+                      backgroundColor: "#ffcc00",
+                      color: "#333",
+                      fontWeight: "bold",
+                      borderRadius: "8px",
+                      padding: "0.25rem 0.5rem",
+                      display: "inline-block",
+                      marginTop: "0.5rem",
+                      fontSize: "0.85rem",
+                    }}
+                  >
+                    🏆 베스트셀러
+                  </div>
+                )}
               </div>
             </div>
           ))}
