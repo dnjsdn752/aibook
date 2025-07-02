@@ -32,3 +32,8 @@ export const requestAi = async (id: number) => {
 export const requestPublishing = async (id: number) => {
     return await api.put(`/manuscripts/${id}/requestpublishing`);
 };
+
+// 원고 단건 조회 (AI 결과 포함)
+export const getManuscript = async (id: number) => {
+    return await api.get(`/manuscripts/${id}`);
+};
