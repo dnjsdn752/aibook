@@ -62,12 +62,21 @@ const ManuscriptEditor: React.FC = () => {
     
 
     const handleSave = async () => {
+        if (!title.trim() || !content.trim()) {
+            alert("제목과 내용을 모두 입력해주세요.");
+            return;
+        }
+
         try {
             const targetId = manuscriptId ?? (id ? Number(id) : null);
 
             if (targetId) {
                 // 기존 원고 수정 (PUT)
-                const response = await editManuscript(targetId, { title, content, authorId: TEMP_AUTHOR_ID });
+                const response = await editManuscript(targetId, {
+                    title,
+                    content,
+                    authorId: TEMP_AUTHOR_ID,
+                });
                 alert("수정 완료!");
                 console.log('✏️ 수정 성공:', response.data);
             } else {
@@ -86,6 +95,7 @@ const ManuscriptEditor: React.FC = () => {
             alert('저장 중 오류가 발생했습니다.');
         }
     };
+
 
     // AI 생성: 표지 + 요약
     const handleAiGenerate = async () => {
