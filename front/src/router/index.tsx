@@ -11,6 +11,7 @@ import BuyPointButton from "../features/User/BuyPoint";
 import AuthorRegistration from "../features/AuthorRegistration/pages/AuthorRegistration";
 import AdminDashboard from "../features/Admin/pages/AdminDashboard";
 import { Stack } from "@mui/material";
+import MyDraftList from "../features/Manuscript/MyDraftList";
 
 export const router = createBrowserRouter([
   {
@@ -34,8 +35,21 @@ export const router = createBrowserRouter([
         element: <MyPage />,
       },
       {
-        path: "manuscripts/new",
-        element: <ManuscriptEditor />,
+        path: "manuscripts",
+        children: [
+          {
+            index: true,
+            element: <MyDraftList />,
+          },
+          {
+            path: "editor", // 새 원고 작성
+            element: <ManuscriptEditor />,
+          },
+          {
+            path: "editor/:id", // 기존 원고 수정
+            element: <ManuscriptEditor />,
+          },
+        ],
       },
       {
         path: "author/registration",

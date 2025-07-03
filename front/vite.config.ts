@@ -10,6 +10,12 @@ export default defineConfig({
     allowedHosts: [
       // 여기에 Gitpod 도메인을 허용
       '.gitpod.io'
-    ]
+    ],
+    proxy: {
+      '/manuscripts': {
+        target: 'http://localhost:8084', // writing 백엔드 주소
+        changeOrigin: true,
+      },
+    }
   }
 });

@@ -48,7 +48,7 @@ export const Layout: React.FC = () => {
             <>
               {isAuthor ? (
                 // 🔹 작가라면 도서등록 버튼
-                <Link to="/manuscripts/new">
+                <Link to="/manuscripts">
                   <button
                     style={{
                       backgroundColor: "#4a90e2",
@@ -60,7 +60,7 @@ export const Layout: React.FC = () => {
                       cursor: "pointer",
                     }}
                   >
-                    도서 등록
+                    집필
                   </button>
                 </Link>
               ) : (

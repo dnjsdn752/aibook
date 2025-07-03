@@ -3,13 +3,14 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://8088-dnjsdn752-aibook-n7lzoljuat8.ws-us120.gitpod.io", // Gateway 주소!
+  baseURL: "https://fluffy-spork-6jjrxqwjr9f54qw-8088.app.github.dev/", // Gateway 주소!
 });
 
 // 원고 등록
 export const registerManuscript = async (data: {
     title: string;
     content: string;
+    authorId: number;
 }) => {
     return await api.post("/manuscripts/registermanuscript", data);
 };
@@ -18,6 +19,7 @@ export const registerManuscript = async (data: {
 export const editManuscript = async (id: number, data: {
     title: string;
     content: string;
+    authorId: number;
 }) => {
     return await api.put(`/manuscripts/${id}/editmanuscript`, data);
 };
@@ -36,4 +38,11 @@ export const requestPublishing = async (id: number) => {
 // 원고 단건 조회 (AI 결과 포함)
 export const getManuscript = async (id: number) => {
     return await api.get(`/manuscripts/${id}`);
+};
+
+
+// 해당 작가의 출간되지 않은 원고 목록
+export const getMyManuscripts = async (authorId: number) => {
+    const response = await axios.get(`/manuscripts/author/${authorId}`);
+    return response.data;
 };
