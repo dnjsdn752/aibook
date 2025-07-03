@@ -3,7 +3,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://8088-dnjsdn752-aibook-kcc5uifn888.ws-us120.gitpod.io", // 도서관리 서비스 포트
+  baseURL: "https://8088-dnjsdn752-aibook-42gwoj78pq9.ws-us120.gitpod.io", // 도서관리 서비스 포트
 });
 
 // books 리스트 가져오기
@@ -21,7 +21,11 @@ export interface ReadingApplyRequest {
 }
 
 export const applyReading = async (data: ReadingApplyRequest) => {
-  const response = await api.post("/reading", data);
+  const response = await api.post("/readings", data, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
   return response.data;
 };
 
