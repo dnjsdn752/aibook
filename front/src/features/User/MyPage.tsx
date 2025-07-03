@@ -23,12 +23,16 @@ interface UserInfo {
 
 interface RentedBook {
   id: number;
+  authorId: number;
   title: string;
-  author: string;
-  image: string;
-  summary: string;
-  view : number;
-  isBestSeller : boolean;
+  category: string;
+  authorName: string;
+  aiImage: string;
+  aiSummary: string;
+  view: number;
+  content: string;
+  isBestSeller: boolean;
+  date: Date;
 }
 
 const MyPage: React.FC = () => {
@@ -52,9 +56,7 @@ const MyPage: React.FC = () => {
         point: point.data.point,
         hasSubscription: response.data.isSubscription, // 또는 user.hasSubscription
       });
-      setRentedBooks([
-        books.data
-      ]);
+      setRentedBooks(books.data);
 
       } catch (error) {
         console.error('유저 정보 로드 실패:', error);
@@ -134,7 +136,7 @@ const MyPage: React.FC = () => {
                 <Box>
                   <Typography variant="subtitle1">{book.title}</Typography>
                   <Typography variant="body2" color="text.secondary">
-                    저자: {book.author}
+                    저자: {book.authorName}
                   </Typography>
                 </Box>
               </Button>
