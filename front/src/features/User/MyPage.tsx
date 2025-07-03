@@ -11,9 +11,7 @@ import {
 } from '@mui/material';
 import BuySubscriptionButton from './BuySubscription';
 import BuyPointButton from './BuyPoint';
-import { myData } from "../../api/user";
-import { myPoint } from "../../api/user";
-import { myReading } from "../../api/user";
+import { myBooks, myData, myPoint,myReading } from "../../api/user";
 import { useNavigate } from 'react-router-dom'; // 도서 상세 페이지 이동을 위해 사용
 
 interface UserInfo {
@@ -27,6 +25,10 @@ interface RentedBook {
   id: number;
   title: string;
   author: string;
+  image: string;
+  summary: string;
+  view : number;
+  isBestSeller : boolean;
 }
 
 const MyPage: React.FC = () => {
@@ -42,7 +44,8 @@ const MyPage: React.FC = () => {
       try {
         const response = await myData(userId); // API 요청
         const point = await myPoint(userId);
-        const reading = await myPoint(userId);
+        const readingIds = await myReading(userId);
+        const books = await myBooks(readingIds.data);
       setUserInfo({
         email: response.data.email,
         name: response.data.userName,
@@ -50,11 +53,18 @@ const MyPage: React.FC = () => {
         hasSubscription: response.data.isSubscription, // 또는 user.hasSubscription
       });
       setRentedBooks([
-        //reading.data
+        books.data
       ]);
 
       } catch (error) {
-      console.error('유저 정보 로드 실패:', error);
+        console.error('유저 정보 로드 실패:', error);
+        return (
+          <Container maxWidth="sm" sx={{ mt: 4 }}>
+            <Typography variant="h4" gutterBottom>
+              마이페이지 없음
+            </Typography>
+          </Container>
+        );
       }
       
       setLoading(false);
@@ -70,6 +80,7 @@ const MyPage: React.FC = () => {
       </Container>
     );
   }
+
 
   return (
     <Container maxWidth="sm" sx={{ mt: 4 }}>

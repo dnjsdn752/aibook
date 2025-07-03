@@ -1,6 +1,9 @@
 package aibook.infra;
 
 import aibook.domain.*;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -52,6 +55,26 @@ public class ReadingController {
         );
         Reading.readingCanceled(readingCanceledCommand);
         
+    }
+
+    @RequestMapping(
+        value = "/reading/{id}",
+        method = RequestMethod.GET,
+        produces = "application/json;charset=UTF-8"
+    )
+    public List<Long> myReading(
+        HttpServletRequest request,
+        HttpServletResponse response,
+        @PathVariable(value = "id") Long id
+    ) throws Exception {
+        System.out.println(
+            "##### /reading/{id}  called #####"
+        );
+        List<Long> ids = new ArrayList<Long> ();
+        Reading.myReadings(id).forEach( x ->
+            ids.add(x.getBookId())
+        );
+        return ids;
     }
 }
 
