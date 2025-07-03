@@ -113,3 +113,32 @@ sudo ./aws/install
 curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
 sudo mv /tmp/eksctl /usr/local/bin
 ```
+ Azure AKS + ACR 설정 가이드
+
+이 문서는 Azure Kubernetes Service(AKS)와 Azure Container Registry(ACR)를 연동하여 컨테이너 배포 환경을 구성하는 과정을 정리
+
+---
+
+## 📦 Azure CLI 설치 (Ubuntu)
+
+```bash
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+🔐 Azure 로그인 및 구독 선택
+bash
+복사
+편집
+az login --use-device-code
+# 출력된 코드 입력 후 브라우저에서 로그인
+# 구독 목록에서 사용할 구독 번호 입력
+☸️ AKS 클러스터 연결
+bash
+복사
+편집
+az aks get-credentials --resource-group a1025-rsrcgrp --name a0725-aks
+kubectl get all
+🏗️ ACR (Azure Container Registry) 생성
+bash
+복사
+편집
+az acr create --resource-group a1025-rsrcgrp --name a1025 --sku Basic
+az acr list --resource-group a1025-rsrcgrp -o table
