@@ -1,4 +1,3 @@
-// front/src/Admin/pages/AdminDashboard.tsx
 import React, { useEffect, useState } from "react";
 import "./AdminDashboard.css";
 import AuthorRequestCard from "../AuthorRequestCard";
@@ -6,7 +5,7 @@ import { fetchAuthorRequests, approveAuthor, rejectAuthor } from "../../../api/a
 
 interface AuthorRequest {
   id: number | string;
-  name: string;
+  authorName: string;
   email: string;
   introduction: string;
   featuredWorks: string;
@@ -17,12 +16,23 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    fetchAuthorRequests()
-      .then((data: AuthorRequest[]) => setRequests(data))
-      .catch(() => setError("신청 목록을 불러오는 중 오류가 발생했습니다."))
-      .finally(() => setLoading(false));
-  }, []);
+useEffect(() => {
+  fetchAuthorRequests()
+    .then((data) => {
+      console.log("작가 요청 목록:", data);
+      if (Array.isArray(data)) {
+        setRequests(data);
+      } else {
+        console.error("응답이 배열이 아닙니다:", data);
+        setError("데이터 형식이 올바르지 않습니다.");
+      }
+    })
+    .catch((err) => {
+      console.error("목록 불러오기 실패:", err);
+      setError("신청 목록을 불러오는 중 오류가 발생했습니다.");
+    })
+    .finally(() => setLoading(false));
+}, []);
 
   const handleApprove = async (id: number | string) => {
     setLoading(true);
@@ -31,7 +41,7 @@ const AdminDashboard = () => {
       setRequests((prev) => prev.filter((req) => req.id !== id));
       alert("작가 승인 처리되었습니다.");
     } catch (e) {
-      console.error(e);
+      console.error("승인 실패:", e);
       alert("승인 처리 중 오류가 발생했습니다.");
     } finally {
       setLoading(false);
@@ -45,7 +55,7 @@ const AdminDashboard = () => {
       setRequests((prev) => prev.filter((req) => req.id !== id));
       alert("작가 거절 처리되었습니다.");
     } catch (e) {
-      console.error(e);
+      console.error("거절 실패:", e);
       alert("거절 처리 중 오류가 발생했습니다.");
     } finally {
       setLoading(false);
@@ -63,7 +73,7 @@ const AdminDashboard = () => {
         <AuthorRequestCard
           key={req.id}
           id={req.id}
-          name={req.name}
+          authorName={req.authorName}
           email={req.email}
           introduction={req.introduction}
           featuredWorks={req.featuredWorks}

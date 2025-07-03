@@ -5,11 +5,13 @@ import type { AuthorRegistrationForm } from "../types/author";
 
 const AuthorRegistration = () => {
   const [form, setForm] = useState<AuthorRegistrationForm>({
-    name: "",
+    authorName: "",
     email: "",
     introduction: "",
     featuredWorks: "",
   });
+
+   const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -20,7 +22,7 @@ const AuthorRegistration = () => {
     try {
       await submitAuthorRegistration(form);
       alert("작가 등록 신청 완료!");
-      setForm({ name: "", email: "", introduction: "", featuredWorks: "" }); // 폼 초기화
+      setForm({ authorName: "", email: "", introduction: "", featuredWorks: "" }); // 폼 초기화
     } catch (error) {
       alert("등록 신청 중 오류가 발생했습니다. 다시 시도해주세요.");
       console.error(error);
@@ -36,8 +38,8 @@ const AuthorRegistration = () => {
         </label>
         <input
           type="text"
-          name="name"
-          value={form.name}
+          name="authorName"
+          value={form.authorName}
           onChange={handleChange}
           required
           placeholder="예: 홍길동"

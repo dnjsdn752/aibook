@@ -6,4 +6,4 @@ const api = axios.create({
 });
 
 export const submitAuthorRegistration = (form: AuthorRegistrationForm) =>
-  api.post("/author-requests", form);
+  api.post("/authors/request", form);

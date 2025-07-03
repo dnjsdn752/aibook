@@ -31,11 +31,11 @@ public class Author {
 
     private Boolean isApprove;
 
-    @PostPersist
-    public void onPostPersist() {
-        AuthorRegistered authorRegistered = new AuthorRegistered(this);
-        authorRegistered.publishAfterCommit();
-    }
+    // @PostPersist
+    // public void onPostPersist() {
+    //     AuthorRegistered authorRegistered = new AuthorRegistered(this);
+    //     authorRegistered.publishAfterCommit();
+    // }
 
     public static AuthorRepository repository() {
         AuthorRepository authorRepository = AuthorApplication.applicationContext.getBean(
@@ -52,12 +52,14 @@ public class Author {
         author.setFeaturedWorks(command.getFeaturedWorks());
         author.setIsApprove(false); // 등록 요청은 승인 전 상태
 
-        repository().save(author);
+        // ✅ 저장 후 ID 포함된 객체 반환
+        Author savedAuthor = repository().save(author);
 
-        AuthorRequested event = new AuthorRequested(author);
+        // ✅ savedAuthor 기준으로 이벤트 생성
+        AuthorRequested event = new AuthorRequested(savedAuthor);
         event.publishAfterCommit();
 
-        return author;
+        return savedAuthor;
     }
 
 

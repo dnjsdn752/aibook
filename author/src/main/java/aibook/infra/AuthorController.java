@@ -1,6 +1,7 @@
 package aibook.infra;
 
 import aibook.domain.*;
+import java.util.*;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,6 +18,14 @@ public class AuthorController {
 
     @Autowired
     AuthorRepository authorRepository;
+
+    // @GetMapping("/authors")
+    // public List<Author> getAllAuthorRequests() {
+    //     Iterable<Author> iterable = authorRepository.findAll();
+    //     List<Author> list = new ArrayList<>();
+    //     iterable.forEach(list::add);
+    //     return list;
+    // }
 
     @PostMapping("/authors/request")
     public Author requestAuthor(@RequestBody RequestAuthorCommand command) {

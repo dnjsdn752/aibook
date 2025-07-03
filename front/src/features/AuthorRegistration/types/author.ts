@@ -1,5 +1,5 @@
 export interface AuthorRegistrationForm {
-  name: string;
+  authorName: string;
   introduction: string;
   email: string;
   featuredWorks: string;

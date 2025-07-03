@@ -1,22 +1,20 @@
-// front/src/Admin/adminApi.ts
+// front/src/api/admin.ts
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://super-duper-space-xylophone-x4gxwvq7xrwf69gx-8088.app.github.dev/", // ✅ 실제 게이트웨이 주소
+  baseURL: "https://super-duper-space-xylophone-x4gxwvq7xrwf69gx-8088.app.github.dev/",
 });
 
-// 작가 신청 목록 조회
+// ❌ 조회 API가 현재 없음 — 임시 Mock 또는 백엔드에 GET /authors 요청 추가 필요
 export const fetchAuthorRequests = async (): Promise<any[]> => {
-  const res = await api.get("/author-requests");
-  return res.data; // 서버가 배열 형태로 작가 신청 목록 반환한다고 가정
+  const res = await api.get("/authors"); // ✅ 만약 GET /authors가 있다면 이렇게 사용
+  return res.data._embedded?.authors || [];
 };
 
-// 작가 신청 승인
 export const approveAuthor = async (id: number | string): Promise<void> => {
-  await api.put(`/author-requests/${id}/approve`);
+  await api.put(`/authors/${id}/approveauthor`);
 };
 
-// 작가 신청 거절
 export const rejectAuthor = async (id: number | string): Promise<void> => {
-  await api.put(`/author-requests/${id}/reject`);
+  await api.put(`/authors/${id}/disapproveauthor`);
 };
