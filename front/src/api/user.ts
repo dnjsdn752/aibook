@@ -10,7 +10,7 @@ export const signupUser = (data: {
   userName: string;
 }) => {
   return axios.post(
-    "https://8088-dnjsdn752-aibook-kcc5uifn888.ws-us120.gitpod.io/users",
+    "https://expert-parakeet-g4rx999gq7w5h97r-8088.app.github.dev/users",
     {
       ...data,
       isSubscription: false, // ⭐ 기본값

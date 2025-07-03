@@ -2,19 +2,12 @@ package aibook.infra;
 
 import aibook.domain.*;
 import java.util.Optional;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.ResponseEntity;
 
-//<<< Clean Arch / Inbound Adaptor
-
 @RestController
-// @RequestMapping(value="/ais")
 @Transactional
 public class AiController {
 
@@ -24,6 +17,7 @@ public class AiController {
     @Autowired
     LlmService llmService;
 
+    // ✅ AI 생성 요청
     @PostMapping("/ais/{id}/generated")
     public ResponseEntity<?> generateAi(@PathVariable Long id) {
         Ai ai = aiRepository.findById(id).orElseThrow();
@@ -39,5 +33,12 @@ public class AiController {
 
         return ResponseEntity.ok("LLM 요청 완료");
     }
+
+    // ✅ AI 결과 조회 (bookId → manuscriptId로 매핑될 경우)
+    @GetMapping("/ais/book/{bookId}")
+    public Ai getAiByBookId(@PathVariable Long bookId) throws Exception {
+        Ai ai = aiRepository.findByManuscriptId(bookId);
+        if (ai == null) throw new Exception("AI not found for bookId: " + bookId);
+        return ai;
+    }
 }
-//>>> Clean Arch / Inbound Adaptor

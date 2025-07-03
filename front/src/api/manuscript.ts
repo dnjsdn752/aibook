@@ -3,7 +3,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://8088-dnjsdn752-aibook-n7lzoljuat8.ws-us120.gitpod.io", // Gateway 주소!
+  baseURL: "https://expert-parakeet-g4rx999gq7w5h97r-8088.app.github.dev", // Gateway 주소!
 });
 
 // 원고 등록

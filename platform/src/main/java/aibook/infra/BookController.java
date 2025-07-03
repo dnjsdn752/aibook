@@ -2,22 +2,21 @@ package aibook.infra;
 
 import aibook.domain.*;
 import java.util.Optional;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-//<<< Clean Arch / Inbound Adaptor
 
 @RestController
-// @RequestMapping(value="/books")
 @Transactional
 public class BookController {
 
     @Autowired
     BookRepository bookRepository;
+
+    // ✅ 책 ID로 단건 조회
+    @GetMapping("/books/{id}")
+    public Book getBookById(@PathVariable Long id) throws Exception {
+        return bookRepository.findById(id)
+            .orElseThrow(() -> new Exception("Book not found"));
+    }
 }
-//>>> Clean Arch / Inbound Adaptor

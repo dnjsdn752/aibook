@@ -36,9 +36,9 @@ spring:
         - id: monitoring
           uri: http://localhost:8088
           predicates:
-            - Path=, /bookpages/**, /readingPages/**, /getPoints/**
-        - id: frontend
-          uri: http://localhost:8080
+            - Path=/bookpages/**, /readingPages/**, /getPoints/**
+        - id: front
+          uri: http://localhost:5173
           predicates:
             - Path=/**
 #>>> API Gateway / Routes
@@ -88,9 +88,9 @@ spring:
         - id: monitoring
           uri: http://monitoring:8080
           predicates:
-            - Path=, 
-        - id: frontend
-          uri: http://frontend:8080
+            - Path=/bookpages/**, /readingPages/**, /getPoints/**
+        - id: front
+          uri: http://frontend:5173
           predicates:
             - Path=/**
       globalcors:
@@ -105,4 +105,4 @@ spring:
             allowCredentials: true
 
 server:
-  port: 8080
+  port: 5173

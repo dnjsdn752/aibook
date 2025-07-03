@@ -1,25 +1,30 @@
 import React from 'react';
 import { Container, Typography, Stack } from '@mui/material';
-import BuySubscriptionButton from './BuySubscription'; 
-import BuyPointButton from './BuyPoint'; 
+import BuySubscriptionButton from './BuySubscription';
+import BuyPointButton from './BuyPoint';
+import BorrowedBookList from './BorrowedBookList'; // ✅ 대여 목록 UI 추가
 
 const MyPage: React.FC = () => {
-  const userId = 1; // 예시용 ID (실제로는 로그인 상태에서 받아와야 함)
-  const amount = 3000;
+  const userId = 1; // 예시용 ID
 
   return (
     <Container maxWidth="sm" sx={{ mt: 4 }}>
+      {/* 🔼 기존 상단 내용 그대로 유지 */}
       <Typography variant="h4" gutterBottom>
         마이페이지
       </Typography>
 
-      <Stack spacing={3} mt={4}>
-        {/* 구독권 구매 버튼 */}
-        <BuySubscriptionButton userId={userId} />
+      <Typography variant="body1">
+        여기에 회원 정보나 구독 정보가 표시됩니다.
+      </Typography>
 
-        {/* 포인트 구매 버튼 */}
+      <Stack spacing={3} mt={4}>
+        <BuySubscriptionButton userId={userId} />
         <BuyPointButton userId={userId} />
       </Stack>
+
+      {/* 🔽 아래에 대여한 책 목록 추가 */}
+      <BorrowedBookList userId={userId} />
     </Container>
   );
 };
