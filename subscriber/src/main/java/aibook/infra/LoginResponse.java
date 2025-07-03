@@ -1,13 +1,21 @@
 package aibook.infra;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
+@NoArgsConstructor
 public class LoginResponse {
-    private Long userId;
+
+    private Long id;
     private String userName;
     private String message;
-}
+    private Boolean isAuthor;
 
+    public LoginResponse(Long id, String userName, String message, Boolean isAuthor) {
+        this.id = id;
+        this.userName = userName;
+        this.message = message;
+        this.isAuthor = isAuthor;
+    }
+}

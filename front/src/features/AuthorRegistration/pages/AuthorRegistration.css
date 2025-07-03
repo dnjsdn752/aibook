@@ -1,0 +1,113 @@
+/* front/src/features/AuthorRegistration/AuthorRegistration.css */
+
+.container {
+  max-width: 700px;
+  margin: 3rem auto;
+  padding: 2.5rem 3rem;
+  background: #ffffffcc; /* 약간 투명한 흰색 배경 */
+  box-shadow: 0 8px 30px rgb(0 0 0 / 0.1);
+  border-radius: 16px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  backdrop-filter: blur(10px);
+  transition: box-shadow 0.3s ease;
+}
+
+.container:hover {
+  box-shadow: 0 12px 40px rgb(0 0 0 / 0.15);
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #222;
+  font-weight: 700;
+  font-size: 2.25rem;
+  letter-spacing: 0.03em;
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #444;
+  font-size: 1.1rem;
+}
+
+label .required {
+  color: #e63946; /* 트렌디한 레드 컬러 */
+  margin-left: 4px;
+}
+
+input[type="text"],
+input[type="email"],
+textarea {
+  width: 100%;
+  padding: 1rem 1.2rem;
+  border-radius: 12px;
+  border: 2px solid #ddd;
+  margin-bottom: 24px;
+  font-size: 1rem;
+  font-family: inherit;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  background-color: #fafafa;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+textarea:focus {
+  border-color: #457b9d;
+  box-shadow: 0 0 6px #457b9daa;
+  outline: none;
+  background-color: #fff;
+}
+
+textarea {
+  min-height: 140px;
+  resize: vertical;
+  font-size: 1rem;
+  line-height: 1.4;
+  color: #333;
+}
+
+button.submit-btn {
+  width: 100%;
+  padding: 1.1rem;
+  background: linear-gradient(90deg, #1d3557 0%, #457b9d 100%);
+  color: #f1faee;
+  border: none;
+  border-radius: 14px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 14px rgba(69, 123, 157, 0.5);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+  user-select: none;
+}
+
+button.submit-btn:hover {
+  background: linear-gradient(90deg, #457b9d 0%, #1d3557 100%);
+  box-shadow: 0 8px 20px rgba(69, 123, 157, 0.7);
+}
+
+button.submit-btn:active {
+  transform: scale(0.98);
+  box-shadow: 0 4px 10px rgba(69, 123, 157, 0.4);
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .container {
+    padding: 2rem 1.5rem;
+    margin: 1.5rem 1rem;
+  }
+
+  .title {
+    font-size: 1.75rem;
+  }
+
+  button.submit-btn {
+    font-size: 1rem;
+    padding: 0.9rem;
+  }
+}

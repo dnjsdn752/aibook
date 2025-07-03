@@ -1,16 +1,14 @@
 import React from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 
-interface LayoutProps {
-  isAuthor?: boolean;
-}
-
-export const Layout: React.FC<LayoutProps> = ({ isAuthor }) => {
+export const Layout: React.FC = () => {
   const navigate = useNavigate();
+
   const isLoggedIn = Boolean(localStorage.getItem("token"));
+  const isAuthor = localStorage.getItem("isAuthor") === "true";
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    localStorage.clear();
     alert("로그아웃 되었습니다.");
     navigate("/login");
   };
@@ -46,27 +44,44 @@ export const Layout: React.FC<LayoutProps> = ({ isAuthor }) => {
         </Link>
 
         <div style={{ display: "flex", gap: "0.5rem" }}>
-          {/* 로그인 + 작가일 때 도서등록 */}
-          {isLoggedIn && isAuthor && (
-            <Link to="/manuscripts">
-              <button
-                style={{
-                  backgroundColor: "#4a90e2",
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: "6px",
-                  padding: "0.5rem 1rem",
-                  fontSize: "1rem",
-                  cursor: "pointer",
-                }}
-              >
-                집필
-              </button>
-            </Link>
-          )}
-
-          {isLoggedIn ? (
+          {isLoggedIn && (
             <>
+              {isAuthor ? (
+                // 🔹 작가라면 도서등록 버튼
+                <Link to="/manuscripts">
+                  <button
+                    style={{
+                      backgroundColor: "#4a90e2",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "6px",
+                      padding: "0.5rem 1rem",
+                      fontSize: "1rem",
+                      cursor: "pointer",
+                    }}
+                  >
+                    집필
+                  </button>
+                </Link>
+              ) : (
+                // 🔹 작가가 아니라면 작가 신청 버튼
+                <Link to="/author/registration">
+                  <button
+                    style={{
+                      backgroundColor: "#4a90e2",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "6px",
+                      padding: "0.5rem 1rem",
+                      fontSize: "1rem",
+                      cursor: "pointer",
+                    }}
+                  >
+                    작가 신청
+                  </button>
+                </Link>
+              )}
+
               <Link to="/mypage">
                 <button
                   style={{
@@ -82,6 +97,7 @@ export const Layout: React.FC<LayoutProps> = ({ isAuthor }) => {
                   마이페이지
                 </button>
               </Link>
+
               <button
                 onClick={handleLogout}
                 style={{
@@ -97,7 +113,9 @@ export const Layout: React.FC<LayoutProps> = ({ isAuthor }) => {
                 로그아웃
               </button>
             </>
-          ) : (
+          )}
+
+          {!isLoggedIn && (
             <>
               <Link to="/login">
                 <button
