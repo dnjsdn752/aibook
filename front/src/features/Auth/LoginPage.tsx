@@ -15,7 +15,9 @@ export default function LoginPage() {
   const onSubmit = async (data: LoginForm) => {
     try {
       const response = await login(data);
+
       localStorage.setItem("token", response.data.token);
+      localStorage.setItem("userId", response.data.userId);
       alert("로그인 성공!");
       navigate("/");
     } catch (err) {

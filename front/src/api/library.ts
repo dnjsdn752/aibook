@@ -14,3 +14,14 @@ export const getBooks = async (keyword = "") => {
   // HAL 응답에서 배열만 추출
   return res.data._embedded?.books || [];
 };
+
+export interface ReadingApplyRequest {
+  userId: number;
+  bookId: number;
+}
+
+export const applyReading = async (data: ReadingApplyRequest) => {
+  const response = await api.post("/reading", data);
+  return response.data;
+};
+
