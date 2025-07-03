@@ -1,14 +1,50 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getBooks } from "../../api/library";
+import { getBooks, applyReading } from "../../api/library";
 
 export const LibraryList: React.FC = () => {
   const [search, setSearch] = useState("");
+  const [selectedBook, setSelectedBook] = useState<any | null>(null);
+  const userId = Number(localStorage.getItem("userId"));
+
 
   const { data = [], isLoading, error } = useQuery({
     queryKey: ["books"],
     queryFn: () => getBooks(),
   });
+
+  const extractIdFromHref = (href: string): number => {
+  const parts = href.split("/");
+  return parseInt(parts[parts.length - 1], 10);
+};
+
+
+  const handleRent = async (book: any) => {
+  
+  const bookHref = book._links?.self?.href;
+
+  if (!bookHref || isNaN(userId)) {
+    alert("유효한 정보가 없습니다.");
+    return;
+  }
+
+  const bookId = extractIdFromHref(bookHref);
+  console.log("✅ 대여 요청 payload:", { userId, bookId });
+  try {
+    await applyReading({
+      userId,        
+      bookId 
+    });
+
+    alert(`"${book.title}" 도서를 대여했습니다.`);
+    setSelectedBook(null);
+  } catch (error) {
+    console.error("대여 실패", error);
+    alert("도서 대여에 실패했습니다.");
+  }
+};
+
+    
 
   if (isLoading) return <p>로딩 중...</p>;
   if (error) return <p>에러가 발생했습니다.</p>;
@@ -72,6 +108,7 @@ export const LibraryList: React.FC = () => {
           {filteredBooks.map((book: any) => (
             <div
               key={book._links.self.href}
+              onClick={() => setSelectedBook(book)}
               style={{
                 background: "rgba(255, 255, 255, 0.9)",
                 borderRadius: "12px",
@@ -93,8 +130,9 @@ export const LibraryList: React.FC = () => {
             >
               <img
                 src={
-                  book.aiImage ||
-                  "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?fit=crop&w=500&q=80"
+                  book.aiImage && book.aiImage.trim() !== ""
+                    ? book.aiImage
+                    : "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?fit=crop&w=500&q=80"
                 }
                 alt={book.title}
                 style={{
@@ -123,8 +161,7 @@ export const LibraryList: React.FC = () => {
                   {book.authorName}
                 </p>
 
-                {/* 🏆 베스트셀러 뱃지 */}
-                {book.isBestSeller == true && (
+                {book.isBestSeller === true && (
                   <div
                     style={{
                       backgroundColor: "#ffcc00",
@@ -145,6 +182,90 @@ export const LibraryList: React.FC = () => {
           ))}
         </div>
       </div>
+
+      {/* 모달 */}
+      {selectedBook && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            backgroundColor: "rgba(0,0,0,0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 1000,
+          }}
+          onClick={() => setSelectedBook(null)}
+        >
+          <div
+            style={{
+              background: "white",
+              padding: "2rem",
+              borderRadius: "12px",
+              maxWidth: "600px",
+              width: "90%",
+              position: "relative",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setSelectedBook(null)}
+              style={{
+                position: "absolute",
+                top: "1rem",
+                right: "1rem",
+                background: "transparent",
+                border: "none",
+                fontSize: "1.2rem",
+                cursor: "pointer",
+              }}
+            >
+              ✖
+            </button>
+
+            <img
+              src={
+                selectedBook.aiImage && selectedBook.aiImage.trim() !== ""
+                  ? selectedBook.aiImage
+                  : "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?fit=crop&w=500&q=80"
+              }
+              alt={selectedBook.title}
+              style={{
+                width: "100%",
+                height: "300px",
+                objectFit: "cover",
+                borderRadius: "8px",
+              }}
+            />
+            <h2 style={{ marginTop: "1rem" }}>{selectedBook.title}</h2>
+            <h4>{selectedBook.authorName}</h4>
+
+            <p style={{ marginTop: "1rem", fontWeight: "bold" }}>📘 AI 요약</p>
+            <p style={{ color: "#333", whiteSpace: "pre-wrap" }}>
+              {selectedBook.aiSummary || "AI 요약이 없습니다."}
+            </p>
+
+            <button
+              onClick={() => handleRent(selectedBook)}
+              style={{
+                marginTop: "1.5rem",
+                padding: "0.75rem 1.5rem",
+                backgroundColor: "#4CAF50",
+                color: "white",
+                border: "none",
+                borderRadius: "8px",
+                fontSize: "1rem",
+                cursor: "pointer",
+              }}
+            >
+              📚 대여하기
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
