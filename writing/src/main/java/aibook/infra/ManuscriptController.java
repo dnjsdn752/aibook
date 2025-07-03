@@ -99,9 +99,10 @@ public class ManuscriptController {
         return manuscript;
     }
 
-    @GetMapping(value = "/manuscripts", produces = "application/json;charset=UTF-8")
-    public List<Manuscript> getMyManuscripts(@RequestParam Long authorId) {
+    @GetMapping("/manuscripts/author/{authorId}")
+    public List<Manuscript> getByAuthorId(@PathVariable Long authorId) {
         return manuscriptRepository.findByAuthorIdAndStatusFalse(authorId);
     }
+
 }
 //>>> Clean Arch / Inbound Adaptor

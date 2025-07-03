@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useParams, useNavigate } from "react-router-dom";
 import {
     TextField,
     Button,
@@ -21,54 +22,68 @@ import {
     getManuscript
 } from '../../api/manuscript';
 
+const TEMP_AUTHOR_ID = 1;
+
+
 import { useQueryClient } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
 
 const ManuscriptEditor: React.FC = () => {
+    const { id } = useParams<{ id?: string }>();
+    const navigate = useNavigate();
+    const queryClient = useQueryClient();
+
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [manuscriptId, setManuscriptId] = useState<number | null>(null);
 
-    const queryClient = useQueryClient();
-    const navigate = useNavigate();
-    const resultRef = useRef<HTMLDivElement | null>(null);
-
-    // AI 생성 결과 저장
     const [aiSummary, setAiSummary] = useState<string | null>(null);
     const [aiImage, setAiImage] = useState<string | null>(null);
     const [loadingAi, setLoadingAi] = useState<boolean>(false);
     const [openModal, setOpenModal] = useState(false);
 
+    const isEditing = !!id;
+
     useEffect(() => {
-    if (!loadingAi && aiSummary && resultRef.current) {
-        resultRef.current.scrollIntoView({ behavior: 'smooth' });
+        if (isEditing) {
+            getManuscript(Number(id))
+                .then(res => {
+                    setTitle(res.data.title || '');
+                    setContent(res.data.content || '');
+                    setManuscriptId(res.data.id);
+                    setAiSummary(res.data.aiSummary || null);
+                    setAiImage(res.data.aiImage || null);
+                })
+                .catch(err => {
+                    console.error('원고 불러오기 실패:', err);
+                    alert('원고를 불러오는 데 실패했습니다.');
+                });
         }
-    }, [loadingAi, aiSummary]);
+    }, [id]);
+    
 
-    // 저장 (신규 등록)
-    const handleTempSave = async () => {
-        try {
-            const response = await registerManuscript({ title, content });
-            setManuscriptId(response.data.id);
-            alert("저장 완료!");
-            console.log('💾 저장 성공:', response.data);
-        } catch (error) {
-            console.error('저장 실패:', error);
-        }
-    };
-
-    // 수정
     const handleSave = async () => {
-        if (!manuscriptId) {
-            alert('먼저 저장 버튼을 눌러 원고를 등록해주세요.');
-            return;
-        }
         try {
-            const response = await editManuscript(manuscriptId, { title, content });
-            alert("수정 완료!");
-            console.log('✏️ 수정 성공:', response.data);
+            const targetId = manuscriptId ?? (id ? Number(id) : null);
+
+            if (targetId) {
+                // 기존 원고 수정 (PUT)
+                const response = await editManuscript(targetId, { title, content, authorId: TEMP_AUTHOR_ID });
+                alert("수정 완료!");
+                console.log('✏️ 수정 성공:', response.data);
+            } else {
+                // 신규 원고 등록 (POST)
+                const response = await registerManuscript({
+                    title,
+                    content,
+                    //authorId: TEMP_AUTHOR_ID,
+                });
+                setManuscriptId(response.data.id);
+                alert("저장 완료!");
+                console.log('💾 저장 성공:', response.data);
+            }
         } catch (error) {
-            console.error('수정 실패:', error);
+            console.error('저장/수정 실패:', error);
+            alert('저장 중 오류가 발생했습니다.');
         }
     };
 
@@ -185,11 +200,8 @@ const ManuscriptEditor: React.FC = () => {
             >
                 {loadingAi ? 'AI 생성 중...' : 'AI 생성'}
             </Button>
-            <Button variant="contained" onClick={handleTempSave}>
+            <Button variant="contained" onClick={handleSave} disabled={isEditing && manuscriptId === null}>
                 저장
-            </Button>
-            <Button variant="contained" color="secondary" onClick={handleSave}>
-                수정
             </Button>
             <Button
                 variant="contained"

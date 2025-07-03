@@ -21,19 +21,20 @@ const MyDraftList: React.FC = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-    const fetchManuscripts = async () => {
-        try {
-        const res = await getMyManuscripts(TEMP_AUTHOR_ID);
-        console.log('API 응답:', res);  // 여기서 응답 확인
-        // 실제 배열 위치에 맞게 수정
-        setManuscripts(res._embedded?.manuscripts || []); 
-        } catch (err) {
-        console.error('원고 불러오기 실패:', err);
-        } finally {
-        setLoading(false);
-        }
-    };
-    fetchManuscripts();
+        const fetchManuscripts = async () => {
+            try {
+                const res = await getMyManuscripts(TEMP_AUTHOR_ID);
+                console.log('API 응답:', res);
+
+                //const manuscripts = res._embedded?.manuscripts || [];
+                setManuscripts(res); 
+            } catch (err) {
+                console.error('원고 불러오기 실패:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchManuscripts();
     }, []);
 
     const handleSelect = (id: number) => {

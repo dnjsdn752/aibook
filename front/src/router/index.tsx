@@ -36,7 +36,7 @@ export const router = createBrowserRouter([
             element: <ManuscriptEditor />,
           },
           {
-            path: ":id", // 기존 원고 수정
+            path: "editor/:id", // 기존 원고 수정
             element: <ManuscriptEditor />,
           },
         ],
