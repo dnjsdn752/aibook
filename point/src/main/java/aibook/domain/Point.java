@@ -91,8 +91,8 @@ public class Point {
                 int refundPoint = readingCanceled.getRefundPoint();
                 point.setPoint(point.getPoint() + refundPoint);
                 repository().save(point);
-                return point;
                 }
+                return point;
 
             })
             .orElse(null);
