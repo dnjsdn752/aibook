@@ -89,14 +89,16 @@ const ManuscriptEditor: React.FC = () => {
 
     // AI 생성: 표지 + 요약
     const handleAiGenerate = async () => {
-        if (!manuscriptId) {
+        const targetId = manuscriptId ?? (id ? Number(id) : null);
+
+        if (!targetId) {
             alert("먼저 원고를 저장해주세요.");
             return;
         }
 
         try {
             setLoadingAi(true);
-            await requestAi(manuscriptId);
+            await requestAi(targetId);
             console.log("📡 AI 요청 완료. 결과 대기 중...");
 
             let attempts = 0;
@@ -105,7 +107,7 @@ const ManuscriptEditor: React.FC = () => {
 
             const pollForResult = async () => {
                 try {
-                    const res = await getManuscript(manuscriptId);
+                    const res = await getManuscript(targetId);
                     console.log("📦 getManuscript polling 응답:", res.data);
 
                     const hasResult = !!res.data?.aiSummary || !!res.data?.aiImage;
@@ -141,12 +143,14 @@ const ManuscriptEditor: React.FC = () => {
 
     // 출간 요청
     const handlePublishRequest = async () => {
-        if (!manuscriptId) {
+        const targetId = manuscriptId ?? (id ? Number(id) : null);
+
+        if (!targetId) {
             alert('먼저 원고를 저장해야 출간 요청이 가능합니다.');
             return;
         }
         try {
-            const response = await requestPublishing(manuscriptId);
+            const response = await requestPublishing(targetId);
             console.log('📢 출간 요청 성공:', response.data);
 
             // ✅ 출간 요청 성공 후: 메인 페이지에서 목록 자동 갱신되게
