@@ -7,6 +7,8 @@ import SignupPage from "../features/Auth/SignupPage";
 import LoginPage from "../features/Auth/LoginPage";
 import BuySubscriptionButton from "../features/User/BuySubscription";
 import BuyPointButton from "../features/User/BuyPoint";
+import AuthorRegistration from "../features/AuthorRegistration/pages/AuthorRegistration";
+import AdminDashboard from "../features/Admin/pages/AdminDashboard";
 import { Stack } from "@mui/material";
 
 export const router = createBrowserRouter([
@@ -42,6 +44,14 @@ export const router = createBrowserRouter([
       {
         path: "manuscripts/new",
         element: <ManuscriptEditor />,
+      },
+      {
+        path: "author/registration",
+        element: <AuthorRegistration />,
+      },
+      {
+        path: "admin",
+        element: <AdminDashboard />,
       },
     ],
   },
