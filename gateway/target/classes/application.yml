@@ -16,7 +16,7 @@ spring:
         - id: subscriber
           uri: http://localhost:8083
           predicates:
-            - Path=/users/**, /readings/**, 
+            - Path=/users/**, /reading/**
         - id: writing
           uri: http://localhost:8084
           predicates:
