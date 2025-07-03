@@ -14,13 +14,13 @@ import lombok.Data;
 @Entity
 @Table(name = "User_table")
 @Data
-//<<< DDD / Aggregate Root
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
+    
+    @Column(unique = true)
     private String email;
 
     private String userName;
@@ -31,15 +31,18 @@ public class User {
 
     private Boolean recommendedSubscription = false;
 
+    // ⭐️ 작가 여부 필드
+    private Boolean isAuthor = false; // 기본값 false
+
     @PostPersist
     public void onPostPersist() {
         UserRegistered userRegistered = new UserRegistered(
-        this.getId(),
-        this.getEmail(),
-        this.getUserName(),
-        this.getPassword()
-    );
-    userRegistered.publishAfterCommit();
+            this.getId(),
+            this.getEmail(),
+            this.getUserName(),
+            this.getPassword()
+        );
+        userRegistered.publishAfterCommit();
     }
 
     public static UserRepository repository() {
@@ -49,39 +52,23 @@ public class User {
         return userRepository;
     }
 
-    //<<< Clean Arch / Port Method
     public void buySubscription(BuySubscriptionCommand command) {
-        //implement business logic here:
         this.isSubscription = command.getIsSubscription();
 
         SubscriptionBought subscriptionBought = new SubscriptionBought(this);
         subscriptionBought.publishAfterCommit();
     }
 
-    //>>> Clean Arch / Port Method
-
-    //<<< Clean Arch / Port Method
-    public static void guideFeeConversionSuggestion(
-        ReadingFailed readingFailed
-    ) {
+    public static void guideFeeConversionSuggestion(ReadingFailed readingFailed) {
         Long userId = readingFailed.getId();
 
         repository().findById(userId).ifPresent(user -> {
             if (Boolean.TRUE.equals(user.getIsSubscription())) {
-                return; // 이미 구독 중이면 무시
+                return;
             }
 
-            user.setRecommendedSubscription(true); // 구독 유도 표시
-
-            // // (선택) 이벤트 발행
-            // SubscriptionRecommended event = new SubscriptionRecommended(user);
-            // event.publishAfterCommit();
-
+            user.setRecommendedSubscription(true);
             repository().save(user);
         });
-
     }
-    //>>> Clean Arch / Port Method
-
 }
-//>>> DDD / Aggregate Root
