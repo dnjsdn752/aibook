@@ -10,7 +10,7 @@ const api = axios.create({
 export const registerManuscript = async (data: {
     title: string;
     content: string;
-    //authorId: number;
+    authorId: number;
 }) => {
     return await api.post("/manuscripts/registermanuscript", data);
 };

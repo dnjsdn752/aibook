@@ -22,8 +22,7 @@ import {
     getManuscript
 } from '../../api/manuscript';
 
-const TEMP_AUTHOR_ID = 1;
-
+const userId = Number(localStorage.getItem("userId"));
 
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -75,7 +74,7 @@ const ManuscriptEditor: React.FC = () => {
                 const response = await editManuscript(targetId, {
                     title,
                     content,
-                    authorId: TEMP_AUTHOR_ID,
+                    authorId: userId,
                 });
                 alert("수정 완료!");
                 console.log('✏️ 수정 성공:', response.data);
@@ -84,7 +83,7 @@ const ManuscriptEditor: React.FC = () => {
                 const response = await registerManuscript({
                     title,
                     content,
-                    //authorId: TEMP_AUTHOR_ID,
+                    authorId: userId,
                 });
                 setManuscriptId(response.data.id);
                 alert("저장 완료!");

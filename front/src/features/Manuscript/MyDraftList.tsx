@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-const TEMP_AUTHOR_ID = 1; // ✅ 하드코딩한 작가 ID
+const userId = Number(localStorage.getItem("userId"));
 
 const MyDraftList: React.FC = () => {
     const [manuscripts, setManuscripts] = useState<any[]>([]);
@@ -23,7 +23,7 @@ const MyDraftList: React.FC = () => {
     useEffect(() => {
         const fetchManuscripts = async () => {
             try {
-                const res = await getMyManuscripts(TEMP_AUTHOR_ID);
+                const res = await getMyManuscripts(userId);
                 console.log('API 응답:', res);
 
                 //const manuscripts = res._embedded?.manuscripts || [];
@@ -35,7 +35,7 @@ const MyDraftList: React.FC = () => {
             }
         };
         fetchManuscripts();
-    }, []);
+    }, [userId]);
 
     const handleSelect = (id: number) => {
         navigate(`/manuscripts/editor/${id}`); // 👉 이 경로로 이동해서 해당 원고 불러오도록 구현
