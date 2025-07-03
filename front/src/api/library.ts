@@ -8,9 +8,9 @@ const api = axios.create({
 
 // books 리스트 가져오기
 export const getBooks = async (keyword = "") => {
-  const res = await api.get("/books", {
+  const res = await api.get("/manuscripts", {
     params: keyword ? { title: keyword } : {},
   });
   // HAL 응답에서 배열만 추출
-  return res.data._embedded?.books || [];
+  return res.data._embedded?.manuscripts || [];
 };

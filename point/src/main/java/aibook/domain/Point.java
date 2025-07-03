@@ -56,7 +56,7 @@ public class Point {
     public static Point decreasePoint(ReadingApplied readingApplied) {
         return repository().findByUserId(readingApplied.getUserId())
             .map(point -> {
-                int usedPoint = 500;
+                int usedPoint = readingApplied.getUsedPoint();
                 if(point.getIsSubscribe()){
                     PointDecreased pointDecreased = new PointDecreased(point);
                     pointDecreased.setBookId(readingApplied.getBookId());
@@ -87,10 +87,13 @@ public class Point {
     public static Point increasePoint(ReadingCanceled readingCanceled) {
         return repository().findByUserId(readingCanceled.getUserId())
             .map(point -> {
-                int refundPoint = 500;
+                if(!point.getIsSubscribe()){
+                int refundPoint = readingCanceled.getRefundPoint();
                 point.setPoint(point.getPoint() + refundPoint);
                 repository().save(point);
+                }
                 return point;
+
             })
             .orElse(null);
     }

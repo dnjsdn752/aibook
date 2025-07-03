@@ -8,15 +8,16 @@ import lombok.Data;
 @Data
 public class BookRegistered extends AbstractEvent {
 
+    
     private Long id;
-    private String bookName;
+    private String title;
     private String category;
-    private String isBestSeller;
+    private Boolean isBestSeller;
     private String authorName;
     private Long authorId;
     private String aiImage;
-    private String ai_summary;
-    private String bookContent;
+    private String aiSummary;
+    private String content;
     private Integer view;
     private Date date;
 
