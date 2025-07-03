@@ -13,12 +13,12 @@ public class AuthorRequested extends AbstractEvent {
 
     public AuthorRequested(Author aggregate) {
         super(aggregate);
-        this.id = author.getId();
-        this.email = author.getEmail();
+        this.id = aggregate.getId();
+        this.email = aggregate.getEmail();
         this.authorName = aggregate.getAuthorName(); 
-        this.authorName = author.getIntroduction();
-        this.featuredWorks = author.getFeaturedWorks();
-        this.isApprove = author.getIsApprove();
+        this.authorName = aggregate.getIntroduction();
+        this.featuredWorks = aggregate.getFeaturedWorks();
+        this.isApprove = aggregate.getIsApprove();
     }
 
     // 필요시 필드 추가 가능
