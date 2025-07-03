@@ -48,7 +48,7 @@ export const Layout: React.FC<LayoutProps> = ({ isAuthor }) => {
         <div style={{ display: "flex", gap: "0.5rem" }}>
           {/* 로그인 + 작가일 때 도서등록 */}
           {isLoggedIn && isAuthor && (
-            <Link to="/manuscripts/new">
+            <Link to="/manuscripts">
               <button
                 style={{
                   backgroundColor: "#4a90e2",
