@@ -20,6 +20,12 @@ public class ReadingApplied extends AbstractEvent {
 
     public ReadingApplied(Reading aggregate) {
         super(aggregate);
+        this.id = aggregate.getId();
+        this.userId = aggregate.getUserId();
+        this.bookId = aggregate.getBookId();
+        this.isReading = aggregate.getIsReading();
+        this.startReading = aggregate.getStartReading();
+        this.webUrl = aggregate.getWebUrl();
     }
 
     public ReadingApplied() {

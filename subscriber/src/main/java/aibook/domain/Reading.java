@@ -46,10 +46,12 @@ public class Reading {
         this.userId = command.getUserId();
         this.bookId = command.getBookId();
 
+        // 1. 먼저 save() 해서 id 생성
+        repository().save(this);
 
+        // 2. 이벤트 생성
         ReadingApplied readingApplied = new ReadingApplied(this);
         readingApplied.publishAfterCommit();
-
     }
 
     public static void readingCanceled(ReadingCanceledCommand command){
@@ -64,7 +66,7 @@ public class Reading {
     }
     
     public static void failSubscription(OutOfPoint outOfPoint) {
-        Reading reading = repository().findById(outOfPoint.getId()).orElseThrow(
+        Reading reading = repository().findById(outOfPoint.getReadingId()).orElseThrow(
             () -> new EntityNotFoundException("해당 ID의 Reading이 존재하지 않습니다: "));
 
         ReadingFailed readingFailed = new ReadingFailed(reading);

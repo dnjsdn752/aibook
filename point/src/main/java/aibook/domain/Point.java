@@ -74,7 +74,12 @@ public class Point {
 
                         return point;
                     } else {
-                        OutOfPoint outOfPoint = new OutOfPoint(point);
+                        OutOfPoint outOfPoint = new OutOfPoint(
+                            point.getId(),
+                            point.getPoint(),
+                            readingApplied.getReadingId(), // 여기서 Reading의 ID
+                            readingApplied.getUserId()
+                        );
                         outOfPoint.publishAfterCommit();
                         return point;
                     }

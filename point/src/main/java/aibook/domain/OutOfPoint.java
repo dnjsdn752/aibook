@@ -1,26 +1,24 @@
 package aibook.domain;
 
-import aibook.domain.*;
 import aibook.infra.AbstractEvent;
-import java.time.LocalDate;
-import java.util.*;
 import lombok.*;
 
-//<<< DDD / Domain Event
 @Data
 @ToString
+@NoArgsConstructor
 public class OutOfPoint extends AbstractEvent {
 
     private Long id;
     private Integer point;
+    private Long readingId;
     private Long userId;
 
-    public OutOfPoint(Point aggregate) {
-        super(aggregate);
-    }
-
-    public OutOfPoint() {
+    // ✅ 생성자 추가
+    public OutOfPoint(Long id, Integer point, Long readingId, Long userId) {
         super();
+        this.id = id;
+        this.point = point;
+        this.readingId = readingId;
+        this.userId = userId;
     }
 }
-//>>> DDD / Domain Event
