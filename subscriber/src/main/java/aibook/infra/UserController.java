@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 //<<< Clean Arch / Inbound Adaptor
 
-// UserController.java
-
 @RestController
 @Transactional
 public class UserController {
@@ -19,10 +17,9 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
 
-    // 구독 구매
-    @RequestMapping(
+    // ✅ 구독 구매
+    @PutMapping(
         value = "/users/{id}/buysubscription",
-        method = RequestMethod.PUT,
         produces = "application/json;charset=UTF-8"
     )
     public User buySubscription(
@@ -40,7 +37,7 @@ public class UserController {
         return user;
     }
 
-    // 🔵 로그인
+    // ✅ 로그인
     @PostMapping("/users/login")
     public LoginResponse login(@RequestBody LoginRequest loginRequest) throws Exception {
         User user = userRepository.findByEmail(loginRequest.getEmail());
@@ -53,7 +50,13 @@ public class UserController {
         }
 
         // 로그인 성공
-        return new LoginResponse(user.getId(), user.getUserName(), "로그인 성공");
+        Boolean isAuthor = user.getIsAuthor() != null ? user.getIsAuthor() : false;
+
+        return new LoginResponse(
+            user.getId(),
+            user.getUserName(),
+            "로그인 성공",
+            isAuthor
+        );
     }
 }
-

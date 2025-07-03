@@ -22,7 +22,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "/",
-    element: <Layout isAuthor={true} />, // 필요 시 isAuthor를 true/false로 변경
+    element: <Layout />, // ✅ 더 이상 isAuthor={true} 넘기지 않음
     children: [
       {
         index: true, // "/"
