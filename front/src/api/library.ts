@@ -3,8 +3,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://8088-dnjsdn752-aibook-kcc5uifn888.ws-us120.gitpod.io", // 도서관리 서비스 포트
-
+  baseURL: import.meta.env.VITE_API_BASE_URL,
 });
 
 // books 리스트 가져오기

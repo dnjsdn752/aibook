@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const login = (data: { email: string; password: string }) => {
   return axios.post(
-    "https://8088-dnjsdn752-aibook-kcc5uifn888.ws-us120.gitpod.io/users/login",
+    `${import.meta.env.VITE_API_BASE_URL}/users/login`,
     data
   );
 };
