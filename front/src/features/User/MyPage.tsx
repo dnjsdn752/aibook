@@ -36,7 +36,7 @@ interface RentedBook {
 }
 
 const MyPage: React.FC = () => {
-  const userId = 1; // 예시용 ID
+  const userId = Number(localStorage.getItem("userId"));
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [rentedBooks, setRentedBooks] = useState<RentedBook[]>([]);
   const [loading, setLoading] = useState(true);
