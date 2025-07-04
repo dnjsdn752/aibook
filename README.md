@@ -79,7 +79,7 @@ AI요청 - http PUT :8084/manuscripts/1/requestai
 ```
 cd frontend
 npm i
-npm run build
+npm run dev
 ```
 
 ## Test by UI
