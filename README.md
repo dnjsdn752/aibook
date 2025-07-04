@@ -47,7 +47,7 @@ mvn spring-boot:run
 ```
 - subscriber
 ```
-구독자 가입 - http :8083/users email="email" userName="민수야" password="123" isSubscription="false"
+구독자 가입 - http :8083/users email="123@naver.com" userName="민수야" password="123456" isSubscription="false"
 구독권 구매 - http PUT :8083/users/{id}/buysubscription isSubscription="true"
 --------------------------------------------------------------
 대여 신청 - http :8083/reading userId=1 bookId=1
@@ -55,8 +55,8 @@ mvn spring-boot:run
 ```
 - writing
 ```
-집필 등록 - http :8084/manuscripts/registermanuscript title="신데렐라" content="이벤트 발행 테스트" authorId=123 authorName="윤원우"
-집필 수정 - http PUT :8084/manuscripts/1/editmanuscript title="신데렐라2" content="수정된 내용22"
+집필 등록 - http :8084/manuscripts/registermanuscript title="웹 개발은 너무 어려워" content="지우는 웹개발에 도전한 지 두 달이 지났다. 처음에는 버튼 하나 눌렀을 때 화면이 바뀌는 게 신기하고 재미있었다. HTML로 구조를 만들고, CSS로 색을 입히는 일이 마치 종이접기 같았다. 그러나 자바스크립트가 등장하면서 상황은 달라졌다. undefined와 null, 콜백 지옥과 비동기 처리는 지우에게 외계어 같았고, 브라우저의 콘솔은 붉은 에러 메시지로 가득 찼다." authorId=1 authorName="윤원우"
+집필 수정 - http PUT :8084/manuscripts/1/editmanuscript title="웹 개발은 너무 어려워2" content="수정된 내용22"
 AI요청 - http PUT :8084/manuscripts/1/requestai
 출간 요청 - http PUT :8084/manuscripts/1/requestpublishing
 ```
@@ -79,7 +79,7 @@ AI요청 - http PUT :8084/manuscripts/1/requestai
 ```
 cd frontend
 npm i
-npm run serve
+npm run build
 ```
 
 ## Test by UI
@@ -134,7 +134,7 @@ az login --use-device-code
 bash
 복사
 편집
-az aks get-credentials --resource-group a1025-rsrcgrp --name a0725-aks
+az aks get-credentials --resource-group a1025-rsrcgrp --name a1025-aks
 kubectl get all
 🏗️ ACR (Azure Container Registry) 생성
 bash
