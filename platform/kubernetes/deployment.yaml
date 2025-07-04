@@ -13,10 +13,11 @@ spec:
     metadata:
       labels:
         app: platform
+        sidecar.istio.io/inject: "true"
     spec:
       containers:
         - name: platform
-          image: "username/platform:latest"
+          image: "wonwoo752/aibook-platform:250704"
           ports:
             - containerPort: 8080
           readinessProbe:

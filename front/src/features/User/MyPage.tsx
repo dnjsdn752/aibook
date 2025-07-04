@@ -11,9 +11,7 @@ import {
 } from '@mui/material';
 import BuySubscriptionButton from './BuySubscription';
 import BuyPointButton from './BuyPoint';
-import { myData } from "../../api/user";
-import { myPoint } from "../../api/user";
-import { myReading } from "../../api/user";
+import { myBooks, myData, myPoint,myReading } from "../../api/user";
 import { useNavigate } from 'react-router-dom'; // 도서 상세 페이지 이동을 위해 사용
 
 interface UserInfo {
@@ -25,12 +23,20 @@ interface UserInfo {
 
 interface RentedBook {
   id: number;
+  authorId: number;
   title: string;
-  author: string;
+  category: string;
+  authorName: string;
+  aiImage: string;
+  aiSummary: string;
+  view: number;
+  content: string;
+  isBestSeller: boolean;
+  date: Date;
 }
 
 const MyPage: React.FC = () => {
-  const userId = 1; // 예시용 ID
+  const userId = Number(localStorage.getItem("userId"));
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [rentedBooks, setRentedBooks] = useState<RentedBook[]>([]);
   const [loading, setLoading] = useState(true);
@@ -42,19 +48,25 @@ const MyPage: React.FC = () => {
       try {
         const response = await myData(userId); // API 요청
         const point = await myPoint(userId);
-        const reading = await myPoint(userId);
+        const readingIds = await myReading(userId);
+        const books = await myBooks(readingIds.data);
       setUserInfo({
         email: response.data.email,
         name: response.data.userName,
         point: point.data.point,
         hasSubscription: response.data.isSubscription, // 또는 user.hasSubscription
       });
-      setRentedBooks([
-        //reading.data
-      ]);
+      setRentedBooks(books.data);
 
       } catch (error) {
-      console.error('유저 정보 로드 실패:', error);
+        console.error('유저 정보 로드 실패:', error);
+        return (
+          <Container maxWidth="sm" sx={{ mt: 4 }}>
+            <Typography variant="h4" gutterBottom>
+              마이페이지 없음
+            </Typography>
+          </Container>
+        );
       }
       
       setLoading(false);
@@ -70,6 +82,7 @@ const MyPage: React.FC = () => {
       </Container>
     );
   }
+
 
   return (
     <Container maxWidth="sm" sx={{ mt: 4 }}>
@@ -123,7 +136,7 @@ const MyPage: React.FC = () => {
                 <Box>
                   <Typography variant="subtitle1">{book.title}</Typography>
                   <Typography variant="body2" color="text.secondary">
-                    저자: {book.author}
+                    저자: {book.authorName}
                   </Typography>
                 </Box>
               </Button>

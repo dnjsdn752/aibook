@@ -3,7 +3,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://fluffy-spork-6jjrxqwjr9f54qw-8088.app.github.dev/", // 도서관리 서비스 포트
+  baseURL: "https://8088-dnjsdn752-aibook-kcc5uifn888.ws-us120.gitpod.io", // 도서관리 서비스 포트
 
 });
 

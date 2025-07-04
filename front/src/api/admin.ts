@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://super-duper-space-xylophone-x4gxwvq7xrwf69gx-8088.app.github.dev/",
+  baseURL: "https://8088-dnjsdn752-aibook-kcc5uifn888.ws-us120.gitpod.io",
 });
 
 // ❌ 조회 API가 현재 없음 — 임시 Mock 또는 백엔드에 GET /authors 요청 추가 필요

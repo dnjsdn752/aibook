@@ -6,7 +6,7 @@ import axios from "axios";
  */
 
 const api = axios.create({
-  baseURL: 'https://special-potato-5pwv9q4594g27r76-8088.app.github.dev', // Gateway 주소
+  baseURL: 'https://8088-dnjsdn752-aibook-kcc5uifn888.ws-us120.gitpod.io', // Gateway 주소
 });
 
 export const signupUser = (data: {
@@ -32,9 +32,18 @@ export const myPoint = (userId: number) => {
 };
 
 export const myReading = (userId: number) => {
-  return api.get(`/readings/${userId}`);
+  return api.get(`/reading/${userId}`);
 };
 
-
+//특정 id 책들만 가져오기
+export const myBooks = (ids: number[]) => {
+  const queryString = ids.map(id => `ids=${id}`).join('&');
+  const url = `/books/mybooks?${queryString}`;
+  if(ids.length == 0)
+    return {
+      data:[]
+  }
+  return api.get(url);
+};
 
 

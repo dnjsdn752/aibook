@@ -2,7 +2,7 @@ import axios from 'axios'
 
 // 기본 API 인스턴스
 const api = axios.create({
-  baseURL: 'https://8088-dnjsdn752-aibook-mb0pv2id9n5.ws-us120.gitpod.io', // Gateway 주소
+  baseURL: 'https://8088-dnjsdn752-aibook-kcc5uifn888.ws-us120.gitpod.io', // Gateway 주소
 });
 
 
