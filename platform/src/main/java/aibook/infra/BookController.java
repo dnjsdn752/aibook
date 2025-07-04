@@ -30,11 +30,12 @@ public class BookController {
     public Iterable<Book> mybooks(
         HttpServletRequest request,
         HttpServletResponse response,
-        @RequestBody List<Long> ids
+        @RequestParam List<Long> ids
     ) throws Exception {
         System.out.println(
             "##### /books/mybooks  called #####"
         );
+        
         return bookRepository.findAllById(ids);
     }
 
