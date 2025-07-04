@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: platform
-          image: "username/platform:latest"
+          image: "wonwoo752/aibook-platform:250704"
           ports:
             - containerPort: 8080
           readinessProbe:

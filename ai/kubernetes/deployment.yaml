@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: ai
-          image: "username/ai:latest"
+          image: "wonwoo752/aibook-ai:250704"
           ports:
             - containerPort: 8080
           readinessProbe:

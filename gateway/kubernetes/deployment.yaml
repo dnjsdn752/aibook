@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
         - name: gateway
-          image: username/gateway:latest
+          image: wonwoo752/aibook-gateway:250704
           ports:
             - containerPort: 8080
