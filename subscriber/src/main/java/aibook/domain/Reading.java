@@ -74,4 +74,9 @@ public class Reading {
 
         repository().delete(reading);
     }
+
+    public static List<Reading> myReadings(Long id) {
+        return repository().findByUserId(id);
+    }
 }
+    

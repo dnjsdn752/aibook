@@ -32,9 +32,16 @@ export const myPoint = (userId: number) => {
 };
 
 export const myReading = (userId: number) => {
-  return api.get(`/readings/${userId}`);
+  return api.get(`/reading/${userId}`);
 };
 
+//특정 id 책들만 가져오기
+export const myBooks = (ids: number[]) => {
+  const queryString = ids.map(id => `ids=${id}`).join('&');
+  const url = `/books/mybooks?${queryString}`;
+  
+  return api.get(url);
+};
 
 
 
