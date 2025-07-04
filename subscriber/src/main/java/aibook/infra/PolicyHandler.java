@@ -66,6 +66,7 @@ public class PolicyHandler {
 
         if (user != null) {
             user.setIsAuthor(Boolean.TRUE.equals(authorApproved.getIsApprove()));
+            user.setAuthorName(authorApproved.getAuthorName());
             userRepository.save(user);
 
             System.out.println("User with email=" + authorApproved.getEmail() + " is now author.");

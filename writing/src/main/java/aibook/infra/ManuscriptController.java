@@ -34,8 +34,9 @@ public class ManuscriptController {
             "##### /manuscript/registerManuscript  called #####"
         );
         Manuscript manuscript = new Manuscript();
-        manuscriptRepository.save(manuscript);
+        
         manuscript.registerManuscript(registerManuscriptCommand);
+        manuscriptRepository.save(manuscript);
         return manuscript;
     }
 

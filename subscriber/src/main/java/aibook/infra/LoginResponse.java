@@ -11,11 +11,13 @@ public class LoginResponse {
     private String userName;
     private String message;
     private Boolean isAuthor;
+    private String authorName;
 
-    public LoginResponse(Long id, String userName, String message, Boolean isAuthor) {
+    public LoginResponse(Long id, String userName, String message, Boolean isAuthor, String authorName) {
         this.id = id;
         this.userName = userName;
         this.message = message;
         this.isAuthor = isAuthor;
+        this.authorName = authorName;
     }
 }

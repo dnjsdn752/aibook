@@ -34,6 +34,8 @@ public class User {
     // ⭐️ 작가 여부 필드
     private Boolean isAuthor = false; // 기본값 false
 
+    private String authorName;
+
     @PostPersist
     public void onPostPersist() {
         UserRegistered userRegistered = new UserRegistered(
@@ -71,4 +73,13 @@ public class User {
             repository().save(user);
         });
     }
+
+    public String getAuthorName() {
+        return this.authorName;
+    }
+
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
+    }
+
 }

@@ -51,12 +51,14 @@ public class UserController {
 
         // 로그인 성공
         Boolean isAuthor = user.getIsAuthor() != null ? user.getIsAuthor() : false;
+        String authorName = isAuthor ? user.getAuthorName() : null; // ✅ 조건부로 작가이름 꺼내기
 
         return new LoginResponse(
             user.getId(),
             user.getUserName(),
             "로그인 성공",
-            isAuthor
+            isAuthor,
+            authorName
         );
     }
 }

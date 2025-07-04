@@ -84,6 +84,7 @@ const ManuscriptEditor: React.FC = () => {
                     title,
                     content,
                     authorId: userId,
+                    authorName: localStorage.getItem("authorName") || "", 
                 });
                 setManuscriptId(response.data.id);
                 alert("저장 완료!");

@@ -11,6 +11,7 @@ export const registerManuscript = async (data: {
     title: string;
     content: string;
     authorId: number;
+    authorName: string;
 }) => {
     return await api.post("/manuscripts/registermanuscript", data);
 };

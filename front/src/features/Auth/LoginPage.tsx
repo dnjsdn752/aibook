@@ -20,6 +20,7 @@ export default function LoginPage() {
       localStorage.setItem("isAuthor", String(response.data.isAuthor));
       localStorage.setItem("userName", response.data.userName);
       localStorage.setItem("userId", String(response.data.id));
+      localStorage.setItem("authorName", response.data.authorName || "");
 
       alert("로그인 성공!");
       navigate("/");
